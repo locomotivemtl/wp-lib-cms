@@ -1,0 +1,47 @@
+{
+    "type": "library",
+    "name": "locomotivemtl/wp-lib-cms",
+    "description": "Locomotive's WordPress CMS Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Locomotive",
+            "homepage": "https://locomotive.ca"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "johnbillion/extended-cpts": "^4.0",
+        "mcaskill/wp-ecocide": "dev-main",
+        "mcaskill/php-array-insert": "^1.0",
+        "wpackagist-plugin/acf-extended": "0.8.8.10"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        },
+        "installer-paths": {
+            "www/mu-plugins/{$name}/": [
+                "type:wordpress-muplugin",
+                "wpackagist-plugin/acf-extended"
+            ],
+            "www/plugins/{$name}/": [
+                "type:wordpress-plugin"
+            ],
+            "www/themes/{$name}/": [
+                "type:wordpress-theme"
+            ],
+            "www/{$name}/": [
+                "type:wordpress-dropin"
+            ]
+        },
+        "wordpress-install-dir": "www/wordpress"
+    }
+}
