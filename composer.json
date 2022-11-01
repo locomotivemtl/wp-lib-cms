@@ -11,10 +11,11 @@
     ],
     "require": {
         "php": ">=7.4",
-        "johnbillion/extended-cpts": "^4.0",
+        "johnbillion/extended-cpts": "^5.0",
         "mcaskill/wp-ecocide": "dev-main",
         "mcaskill/php-array-insert": "^1.0",
-        "wpackagist-plugin/acf-extended": "0.8.8.10"
+        "wpackagist-plugin/acf-extended": "^0.8",
+        "wpackagist-plugin/advanced-custom-fields-implementation": "^6.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -23,25 +24,14 @@
         "optimize-autoloader": true,
         "sort-packages": true
     },
+    "autoload": {
+        "psr-4": {
+            "Library\\": "includes/"
+        }
+    },
     "extra": {
         "branch-alias": {
             "dev-main": "1.x-dev"
-        },
-        "installer-paths": {
-            "www/mu-plugins/{$name}/": [
-                "type:wordpress-muplugin",
-                "wpackagist-plugin/acf-extended"
-            ],
-            "www/plugins/{$name}/": [
-                "type:wordpress-plugin"
-            ],
-            "www/themes/{$name}/": [
-                "type:wordpress-theme"
-            ],
-            "www/{$name}/": [
-                "type:wordpress-dropin"
-            ]
-        },
-        "wordpress-install-dir": "www/wordpress"
+        }
     }
 }

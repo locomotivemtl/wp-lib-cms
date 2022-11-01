@@ -1,0 +1,46 @@
+# WordPress
+# ----------------
+
+/www/*
+!/www/index.php
+!/www/wp-config.php
+
+# WP-CLI
+# ----------------
+
+.wp-cli
+wp-cli.local.yml
+
+# Dotenv
+# ----------------
+
+.env
+.env.*
+!.env.example
+
+# Development
+# ----------------
+
+phpcs.xml
+phpstan.neon
+phpunit.xml
+psalm.xml
+
+# Logs
+# ----------------
+
+*.log
+
+# Package Managers
+# ----------------
+
+/node_modules
+/vendor
+auth.json
+
+# Project Managers
+# ----------------
+
+/.idea
+/.nova
+/.vagrant
