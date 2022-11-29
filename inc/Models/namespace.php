@@ -1,6 +1,6 @@
 <?php
 
-namespace WpLib\Models;
+namespace App\Cms\Models;
 
 use WP_Query;
 

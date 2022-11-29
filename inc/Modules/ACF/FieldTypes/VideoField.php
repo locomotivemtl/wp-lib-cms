@@ -1,11 +1,11 @@
 <?php
 
-namespace WpLib\Modules\ACF\FieldTypes;
+namespace App\Cms\Modules\ACF\FieldTypes;
 
 use acf_field_image;
 
-use function WpLib\Support\path;
-use function WpLib\Support\uri;
+use function App\Cms\Support\path;
+use function App\Cms\Support\uri;
 
 /**
  * Video Field

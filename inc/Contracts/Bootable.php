@@ -1,6 +1,6 @@
 <?php
 
-namespace WpLib\Contracts;
+namespace App\Cms\Contracts;
 
 /**
  * Bootable interface

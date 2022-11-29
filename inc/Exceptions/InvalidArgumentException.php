@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Exceptions;
+namespace App\Cms\Exceptions;
 
-use WpLib\Contracts\Exceptions\Exception;
+use App\Cms\Contracts\Exceptions\Exception;
 
 /**
  * Thrown if an argument is not of the expected type.

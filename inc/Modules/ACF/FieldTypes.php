@@ -1,13 +1,13 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
 use acf_field;
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 use WP_Post;
 
-use function WpLib\Support\with_filters;
-use function WpLib\Support\without_filters;
+use function App\Cms\Support\with_filters;
+use function App\Cms\Support\without_filters;
 
 /**
  * ACF Module: Field Types

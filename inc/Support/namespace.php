@@ -1,11 +1,11 @@
 <?php
 
-namespace WpLib\Support;
+namespace App\Cms\Support;
 
-use WpLib\Exceptions\InvalidArgumentException;
+use App\Cms\Exceptions\InvalidArgumentException;
 
-use const WpLib\PLUGIN_PATH;
-use const WpLib\PLUGIN_URL;
+use const App\Cms\PLUGIN_PATH;
+use const App\Cms\PLUGIN_URL;
 
 /**
  * Retrieves the directory URI of the framework.
@@ -75,7 +75,7 @@ function view(string $path, array $data = []): void
 function load_textdomain(string $domain = null): bool
 {
     if (empty($domain)) {
-        $domain = 'wplib';
+        $domain = 'app/cms';
     }
 
     $locale = determine_locale();
@@ -190,12 +190,12 @@ function recommended_image_size($width, $height = null, $ratio = null): string
 
     if ($ratio) {
         /* translators: 1: Width, 2: Height, 3: Ratio. */
-        $text = _x('Recommended image size: %d×%d (%s).', 'image size: width x height + ratio', 'wplib');
+        $text = _x('Recommended image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
         return sprintf($text, $width, $height, $ratio);
     }
 
     /* translators: 1: Width, 2: Height. */
-    $text = _x('Recommended image size: %d×%d.', 'image size: width x height', 'wplib');
+    $text = _x('Recommended image size: %d×%d.', 'image size: width x height', 'app/cms');
     return sprintf($text, $width, $height);
 }
 
@@ -235,16 +235,16 @@ function recommended_svg_image($width = null, $height = null, $ratio = null): st
 
         if ($ratio) {
             /* translators: 1: Width, 2: Height, 3: Ratio. */
-            $text = _x('An SVG image is recommended or an image size: %d×%d (%s).', 'image size: width x height + ratio', 'wplib');
+            $text = _x('An SVG image is recommended or an image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
             return sprintf($text, $width, $height, $ratio);
         }
 
         /* translators: 1: Width, 2: Height. */
-        $text = _x('An SVG image is recommended or an image size: %d×%d.', 'image size: width x height', 'wplib');
+        $text = _x('An SVG image is recommended or an image size: %d×%d.', 'image size: width x height', 'app/cms');
         return sprintf($text, $width, $height);
     }
 
-    return _x('An SVG image is recommended.', 'image size', 'wplib');
+    return _x('An SVG image is recommended.', 'image size', 'app/cms');
 }
 
 /**

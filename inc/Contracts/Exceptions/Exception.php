@@ -1,6 +1,6 @@
 <?php
 
-namespace WpLib\Contracts\Exceptions;
+namespace App\Cms\Contracts\Exceptions;
 
 interface Exception extends \Throwable
 {

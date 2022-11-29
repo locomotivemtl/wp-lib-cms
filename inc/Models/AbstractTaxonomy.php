@@ -1,15 +1,15 @@
 <?php
 
-namespace WpLib\Models;
+namespace App\Cms\Models;
 
-use WpLib\Contracts\Models\Taxonomy;
-use WpLib\Exceptions\MissingTaxonomyIdentifierException;
-use WpLib\Models\AbstractModel;
+use App\Cms\Contracts\Models\Taxonomy;
+use App\Cms\Exceptions\MissingTaxonomyIdentifierException;
+use App\Cms\Models\AbstractModel;
 use WP_Taxonomy;
 use WP_Query;
 
-use function WpLib\Support\maybe_add_action;
-use function WpLib\Support\maybe_add_filter;
+use function App\Cms\Support\maybe_add_action;
+use function App\Cms\Support\maybe_add_filter;
 
 /**
  * Taxonomy Model

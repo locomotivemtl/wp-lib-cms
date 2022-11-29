@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Exceptions;
+namespace App\Cms\Exceptions;
 
-use WpLib\Contracts\Exceptions\Exception;
+use App\Cms\Contracts\Exceptions\Exception;
 
 /**
  * Thrown if a value does not match with a set of values.

@@ -1,16 +1,16 @@
 <?php
 
-namespace WpLib\Models;
+namespace App\Cms\Models;
 
-use WpLib\Contracts\Models\PostType;
-use WpLib\Exceptions\MissingPostTypeIdentifierException;
-use WpLib\Models\AbstractModel;
-use WpLib\Modules\Polylang;
+use App\Cms\Contracts\Models\PostType;
+use App\Cms\Exceptions\MissingPostTypeIdentifierException;
+use App\Cms\Models\AbstractModel;
+use App\Cms\Modules\Polylang;
 use WP_Post_Type;
 use WP_Query;
 
-use function WpLib\Support\maybe_add_action;
-use function WpLib\Support\maybe_add_filter;
+use function App\Cms\Support\maybe_add_action;
+use function App\Cms\Support\maybe_add_filter;
 
 /**
  * Post Type Model
@@ -186,7 +186,6 @@ abstract class AbstractPostType extends AbstractModel implements PostType
         }
 
         if (class_exists('App\\Polylang')) {
-
             add_filter('get_page_uri', 'Polylang\pll_get_page_uri', 10, 2);
             $slugs = array_map('get_page_uri', $slugs);
             remove_filter('get_page_uri', 'Polylang\pll_get_page_uri', 10);

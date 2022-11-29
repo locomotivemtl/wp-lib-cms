@@ -1,16 +1,16 @@
 <?php
 
-namespace WpLib\Modules;
+namespace App\Cms\Modules;
 
-use WpLib\Contracts\Bootable;
-use WpLib\Contracts\Models\Model;
-use WpLib\Models\PostTypes\Page;
+use App\Cms\Contracts\Bootable;
+use App\Cms\Contracts\Models\Model;
+use App\Cms\Models\PostTypes\Page;
 use InvalidArgumentException;
 use WP_Post;
 use WP_Post_Type;
 use WP_Query;
 
-use function WpLib\Support\is_frontend_doing_ajax;
+use function App\Cms\Support\is_frontend_doing_ajax;
 
 /**
  * Module: Page for Posts
@@ -41,12 +41,12 @@ class PageForPosts implements Bootable
      *
      * @var string
      */
-    const OPTION_NAME = 'wplib_page_for_posts';
+    const OPTION_NAME = 'app/cms_page_for_posts';
 
     /**
      * @var string
      */
-    const FIELD_UPDATES_OPTION_NAME = 'wplib_page_for_field_updates';
+    const FIELD_UPDATES_OPTION_NAME = 'app/cms_page_for_field_updates';
 
     /**
      * The settings section name.
@@ -115,7 +115,7 @@ class PageForPosts implements Bootable
         add_filter('post_type_archive_link',  [$this, 'post_type_archive_link'], 10, 2);
 
         /**
-         * WpLib Modules Compatibility
+         * App Modules Compatibility
          */
         add_filter('xyz/model/get_rewrite_slugs', [$this, 'filter_model_rewrite_slugs'], 10, 2);
 
@@ -141,7 +141,7 @@ class PageForPosts implements Bootable
      */
     public function acf_location_page_type_rule_values(array $values = []): array
     {
-        $values['post_type_archive'] = __('All post type archives', 'wplib');
+        $values['post_type_archive'] = __('All post type archives', 'app/cms');
 
         $archives = static::get_pages_for_posts();
 
@@ -294,7 +294,7 @@ class PageForPosts implements Bootable
                 $post_type_object = get_post_type_object($post_type);
 
                 $notice = sprintf(
-                    __('You are currently editing the page that shows your latest %s.', 'wplib'),
+                    __('You are currently editing the page that shows your latest %s.', 'app/cms'),
                     strtolower($post_type_object->labels->name)
                 );
 
@@ -483,7 +483,7 @@ class PageForPosts implements Bootable
             }
 
             if ($front_page === $post_id) {
-                wp_die(__('You cannot delete the front page.', 'wplib'), 403);
+                wp_die(__('You cannot delete the front page.', 'app/cms'), 403);
             }
         }
 
@@ -496,7 +496,7 @@ class PageForPosts implements Bootable
         $post_type_object = get_post_type_object($post_type);
 
         $message = sprintf(
-            __('You cannot delete the page while it is assigned to show your latest %s.', 'wplib'),
+            __('You cannot delete the page while it is assigned to show your latest %s.', 'app/cms'),
             strtolower($post_type_object->labels->name)
         );
 
@@ -612,14 +612,14 @@ class PageForPosts implements Bootable
     {
         if (!isset($labels->page_for_posts)) {
             $labels->page_for_posts = sprintf(
-                _x('%s Page', 'Page for post type', 'wplib'),
+                _x('%s Page', 'Page for post type', 'app/cms'),
                 $labels->name
             );
         }
 
         if (!isset($labels->page_for_posts_field)) {
             $labels->page_for_posts_field = sprintf(
-                _x('%1$s page: %2$s', '1. Post type; 2. "%s"', 'wplib'),
+                _x('%1$s page: %2$s', '1. Post type; 2. "%s"', 'app/cms'),
                 $labels->name,
                 '%s'
             );
@@ -685,7 +685,7 @@ class PageForPosts implements Bootable
             return $post_type->labels->page_for_posts_field;
         } else {
             return sprintf(
-                _x('%1$s: %2$s', 'Used to explain or start an enumeration', 'wplib'),
+                _x('%1$s: %2$s', 'Used to explain or start an enumeration', 'app/cms'),
                 $post_type->label,
                 '%s'
             );
@@ -719,14 +719,14 @@ class PageForPosts implements Bootable
 
             add_settings_section(
                 $this->settings_section,
-                sprintf(_x('%s Options', 'page for posts', 'wplib'), get_bloginfo('name')),
+                sprintf(_x('%s Options', 'page for posts', 'app/cms'), get_bloginfo('name')),
                 '',
                 'reading'
             );
 
             add_settings_field(
                 static::OPTION_NAME,
-                __('Pages to use as archives', 'wplib'),
+                __('Pages to use as archives', 'app/cms'),
                 [$this, 'render_archive_settings_field'],
                 'reading',
                 $this->settings_section,
@@ -737,7 +737,7 @@ class PageForPosts implements Bootable
 
             add_settings_field(
                 static::FIELD_UPDATES_OPTION_NAME,
-                __('Page for Field Updates', 'wplib'),
+                __('Page for Field Updates', 'app/cms'),
                 [$this, 'render_page_settings_field'],
                 'reading',
                 $this->settings_section,
@@ -804,7 +804,7 @@ class PageForPosts implements Bootable
 
         echo '<fieldset>' .
             '<legend class="screen-reader-text"><span>' .
-            __('Pages to use as archives', 'wplib') .
+            __('Pages to use as archives', 'app/cms') .
             '</span></legend>';
 
         foreach ($args['post_types'] as $post_type_obj) {

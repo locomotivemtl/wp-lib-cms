@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Exceptions;
+namespace App\Cms\Exceptions;
 
-use WpLib\Contracts\Exceptions\Exception;
+use App\Cms\Contracts\Exceptions\Exception;
 
 /**
  * Thrown if the custom field is not of the expected format.

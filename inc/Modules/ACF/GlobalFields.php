@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 
 /**
  * ACF Module: Global Fields
@@ -25,7 +25,7 @@ class GlobalFields implements Bootable
      *
      * @var string
      */
-    protected $acf_option_prefix = 'wplib_acf_';
+    protected $acf_option_prefix = 'app/cms_acf_';
 
     /**
      * Temporary store of option values to save.

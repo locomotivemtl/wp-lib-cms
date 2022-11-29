@@ -1,6 +1,6 @@
 <?php
 
-namespace WpLib\Contracts\Models;
+namespace App\Cms\Contracts\Models;
 
 /**
  * Taxonomy Model interface

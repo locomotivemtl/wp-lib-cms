@@ -1,16 +1,16 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
-use WpLib\Contracts\Bootable;
-use WpLib\Exceptions\InvalidCustomFieldException;
+use App\Cms\Contracts\Bootable;
+use App\Cms\Exceptions\InvalidCustomFieldException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-use function WpLib\Modules\ACF\acf_is_field_layout;
-use function WpLib\Modules\ACF\acf_is_field_layout_key;
+use function App\Cms\Modules\ACF\acf_is_field_layout;
+use function App\Cms\Modules\ACF\acf_is_field_layout_key;
 
-use const WpLib\ACF_FIELDS_PATH;
+use const App\Cms\ACF_FIELDS_PATH;
 use const WP_CONTENT_DIR;
 
 /**

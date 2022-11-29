@@ -1,16 +1,16 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
 use acf_field;
-use WpLib\Models\PostTypes\Author;
-use WpLib\Models\Taxonomies\PostFormat;
+use App\Cms\Models\PostTypes\Author;
+use App\Cms\Models\Taxonomies\PostFormat;
 use WP_Post;
 use WP_Taxonomy;
 use WP_Term;
 
-use function WpLib\Modules\Polylang\pll_preferred_language;
-use function WpLib\Support\path;
+use function App\Cms\Modules\Polylang\pll_preferred_language;
+use function App\Cms\Support\path;
 
 /**
  * Bootstraps the module.
@@ -317,7 +317,7 @@ function create_field_author(string $key, array $prefs = null): array
     $field = [
         'key'           => "field_{$key}_author_object",
         'name'          => 'author',
-        'label'         => __('Choose an author', 'wplib'),
+        'label'         => __('Choose an author', 'app/cms'),
         'placeholder'   => __('None'),
         'type'          => 'select',
         'required'      => 0,
@@ -348,21 +348,21 @@ function create_fields_person(string $key, array $prefs = null): array
         'name' => [
             'key'                 => "field_{$key}_name",
             'name'                => 'name',
-            'label'               => __('Name', 'wplib'),
+            'label'               => __('Name', 'app/cms'),
             'type'                => 'text',
             'required'            => 0,
         ],
         'role' => [
             'key'                 => "field_{$key}_role",
             'name'                => 'role',
-            'label'               => __('Role', 'wplib'),
+            'label'               => __('Role', 'app/cms'),
             'type'                => 'text',
             'required'            => 0,
         ],
         'biography' => [
             'key'                 => "field_{$key}_biography",
             'name'                => 'biography',
-            'label'               => __('Biography', 'wplib'),
+            'label'               => __('Biography', 'app/cms'),
             'type'                => 'textarea',
             'required'            => 0,
             'rows'                => 3,
@@ -371,15 +371,15 @@ function create_fields_person(string $key, array $prefs = null): array
         'link' => [
             'key'                 => "field_{$key}_link",
             'name'                => 'link',
-            'label'               => __('Link', 'wplib'),
+            'label'               => __('Link', 'app/cms'),
             'type'                => 'link',
             'return_format'       => 'array',
         ],
         'image' => [
             'key'                 => "field_{$key}_image",
             'name'                => 'image',
-            'label'               => __('Image', 'wplib'),
-            'label'               => __('Image', 'wplib'),
+            'label'               => __('Image', 'app/cms'),
+            'label'               => __('Image', 'app/cms'),
             // 'instructions'        => recommended_image_size( ACF_AVATAR_SMALL_IMAGE_SIZE ),
             'type'                => 'image',
             'required'            => 0,
@@ -463,7 +463,7 @@ function pll_language_defined(): void
 function pll_no_language_defined(): void
 {
     add_filter('acf/settings/default_language', 'pll_default_language');
-    add_filter('acf/settings/current_language', '\\WpLib\\Modules\\Polylang\\pll_preferred_language');
+    add_filter('acf/settings/current_language', '\\App\\Cms\\Modules\\Polylang\\pll_preferred_language');
 }
 
 /**

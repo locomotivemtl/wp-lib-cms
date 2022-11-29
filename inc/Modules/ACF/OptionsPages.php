@@ -1,10 +1,10 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 
-use function WpLib\Modules\Polylang\pll_preferred_language;
+use function App\Cms\Modules\Polylang\pll_preferred_language;
 
 /**
  * ACF Module: Options Pages

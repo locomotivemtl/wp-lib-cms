@@ -1,9 +1,9 @@
 <?php
 
-namespace WpLib\Modules;
+namespace App\Cms\Modules;
 
 use InvalidArgumentException;
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 use WP_Post;
 
 /**

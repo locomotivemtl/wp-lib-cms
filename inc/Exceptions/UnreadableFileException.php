@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Exceptions;
+namespace App\Cms\Exceptions;
 
-use WpLib\Contracts\Exceptions\Exception;
+use App\Cms\Contracts\Exceptions\Exception;
 
 /**
  * Thrown if the file can not be read.

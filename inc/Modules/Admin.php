@@ -1,14 +1,14 @@
 <?php
 
-namespace WpLib\Modules;
+namespace App\Cms\Modules;
 
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 use WP_Admin_Bar;
 use WP_Query;
 
-use const WpLib\VERSION;
+use const App\VERSION;
 
-use function WpLib\Support\uri;
+use function App\Cms\Support\uri;
 
 /**
  * Module: WordPress Admin
@@ -128,7 +128,7 @@ class Admin implements Bootable
     public function enqueue_assets(): void
     {
         wp_enqueue_style(
-            'wp-lib-admin',
+            'app-cms-admin',
             uri('resources/styles/admin.css'),
             [],
             VERSION,
@@ -136,7 +136,7 @@ class Admin implements Bootable
         );
 
         wp_enqueue_style(
-            'wp-lib-acf',
+            'app-cms-acf',
             uri('resources/styles/acf.css'),
             [
                 'acf-field-group',
@@ -146,7 +146,7 @@ class Admin implements Bootable
         );
 
         wp_enqueue_script(
-            'wp-lib-acf',
+            'app-cms-acf',
             uri('resources/scripts/acf.js'),
             [
                 'acf-input',

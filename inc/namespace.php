@@ -1,12 +1,12 @@
 <?php
 
-namespace WpLib;
+namespace App\Cms;
 
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 use WP_Post_Type;
 use WP_Taxonomy;
 
-use function WpLib\Support\path;
+use function App\Cms\Support\path;
 
 /**
  * Bootstraps the plugin.
@@ -60,8 +60,8 @@ function create_initial_constants(): void
  */
 function register_initial_hooks(): void
 {
-    add_action('plugins_loaded', 'WpLib\\Support\\load_textdomain');
-    add_filter('sanitize_title', 'WpLib\\Support\\sanitize_zero_chars');
+    add_action('plugins_loaded', 'App\\Cms\\Support\\load_textdomain');
+    add_filter('sanitize_title', 'App\\Cms\\Support\\sanitize_zero_chars');
 
     add_filter('xyz/acf/settings/load_php', __NAMESPACE__ . '\\filter_acf_load_php');
 

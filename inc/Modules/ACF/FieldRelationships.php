@@ -1,8 +1,8 @@
 <?php
 
-namespace WpLib\Modules\ACF;
+namespace App\Cms\Modules\ACF;
 
-use WpLib\Contracts\Bootable;
+use App\Cms\Contracts\Bootable;
 
 /**
  * ACF Module: Field Relationships

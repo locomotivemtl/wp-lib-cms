@@ -1,9 +1,9 @@
 <?php
 
-namespace WpLib\Models;
+namespace App\Cms\Models;
 
-use WpLib\Contracts\Bootable;
-use WpLib\Contracts\Models\Model;
+use App\Cms\Contracts\Bootable;
+use App\Cms\Contracts\Models\Model;
 
 /**
  * Base Model
