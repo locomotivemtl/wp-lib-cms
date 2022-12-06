@@ -706,11 +706,6 @@ class PageForPosts implements Bootable
                 static::OPTION_NAME,
                 [$this, 'sanitize_settings']
             );
-            register_setting(
-                'reading',
-                static::FIELD_UPDATES_OPTION_NAME,
-                [$this, 'sanitize_settings']
-            );
 
             add_settings_section(
                 $this->settings_section,
@@ -728,17 +723,6 @@ class PageForPosts implements Bootable
                 [
                     'post_types' => $post_types
                 ],
-            );
-
-            add_settings_field(
-                static::FIELD_UPDATES_OPTION_NAME,
-                __('Page for Field Updates', 'app/cms'),
-                [$this, 'render_page_settings_field'],
-                'reading',
-                $this->settings_section,
-                [
-                    'option_name' => static::FIELD_UPDATES_OPTION_NAME
-                ]
             );
         }
     }

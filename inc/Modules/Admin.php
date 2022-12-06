@@ -4,9 +4,8 @@ namespace App\Cms\Modules;
 
 use App\Cms\Contracts\Bootable;
 use WP_Admin_Bar;
-use WP_Query;
 
-use const App\VERSION;
+use const App\Cms\VERSION;
 
 use function App\Cms\Support\uri;
 

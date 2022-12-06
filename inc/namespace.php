@@ -44,7 +44,6 @@ function bootstrap(array $modules = []): void
  */
 function create_initial_constants(): void
 {
-    define(__NAMESPACE__ . '\VERSION',     '202204111322');
     define(__NAMESPACE__ . '\PLUGIN_DIR',  plugin_basename(__DIR__));
     define(__NAMESPACE__ . '\PLUGIN_PATH', plugin_dir_path(__DIR__));
     define(__NAMESPACE__ . '\PLUGIN_URL',  plugin_dir_url(__DIR__));
