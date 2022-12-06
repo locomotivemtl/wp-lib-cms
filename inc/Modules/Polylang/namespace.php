@@ -66,10 +66,13 @@ function filter_languages_list( array $languages, PLL_Model $model ) : array
             $languages[ $k ]->active = true;
         }
 
-        foreach ( get_option( PageForPosts::OPTION_NAME ) as $post_type => $post_id ) {
-            if ( ! empty( $post_id ) ) {
-                $key = "page_for_{$post_type}";
-                $languages[ $k ]->{$key} = $model->post->get( $post_id, $language );
+        $pages_for_post = get_option( PageForPosts::OPTION_NAME );
+        if ( is_array( $pages_for_post ) ) {
+            foreach ( $pages_for_post as $post_type => $post_id ) {
+                if ( ! empty( $post_id ) ) {
+                    $key = "page_for_{$post_type}";
+                    $languages[ $k ]->{$key} = $model->post->get( $post_id, $language );
+                }
             }
         }
     }

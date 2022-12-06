@@ -11,7 +11,7 @@ use function App\Cms\Modules\Polylang\pll_preferred_language;
  *
  * This module registers a collection of custom options pages.
  */
-abstract class OptionsPages implements Bootable
+abstract class AbstractOptionsPages implements Bootable
 {
     /**
      * Store of WordPress Admin menu URLs
