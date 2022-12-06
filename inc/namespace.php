@@ -6,8 +6,6 @@ use App\Cms\Contracts\Bootable;
 use WP_Post_Type;
 use WP_Taxonomy;
 
-use function App\Cms\Support\path;
-
 /**
  * Bootstraps the plugin.
  *
@@ -16,8 +14,6 @@ use function App\Cms\Support\path;
  */
 function bootstrap(array $modules = []): void
 {
-    create_initial_constants();
-
     register_initial_hooks();
 
     provide_extra_hooks();
@@ -35,21 +31,6 @@ function bootstrap(array $modules = []): void
             $module->boot();
         }
     }
-}
-
-/**
- * Defines initial plugin constants.
- *
- * @return void
- */
-function create_initial_constants(): void
-{
-    define(__NAMESPACE__ . '\PLUGIN_DIR',  plugin_basename(__DIR__));
-    define(__NAMESPACE__ . '\PLUGIN_PATH', plugin_dir_path(__DIR__));
-    define(__NAMESPACE__ . '\PLUGIN_URL',  plugin_dir_url(__DIR__));
-
-    define(__NAMESPACE__ . '\ACF_FIELDS_PATH',  path('resources/fields'));
-    define(__NAMESPACE__ . '\ACF_LAYOUTS_PATH', path('resources/blocks'));
 }
 
 /**
