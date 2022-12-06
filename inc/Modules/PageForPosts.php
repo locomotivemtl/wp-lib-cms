@@ -44,11 +44,6 @@ class PageForPosts implements Bootable
     const OPTION_NAME = 'app/cms_page_for_posts';
 
     /**
-     * @var string
-     */
-    const FIELD_UPDATES_OPTION_NAME = 'app/cms_page_for_field_updates';
-
-    /**
      * The settings section name.
      *
      * @var string

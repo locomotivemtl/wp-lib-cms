@@ -2,10 +2,6 @@
 
 namespace App\Cms\Modules\ACF;
 
-use acf_field;
-use App\Cms\Models\PostTypes\Author;
-use App\Cms\Models\Taxonomies\PostFormat;
-use WP_Post;
 use WP_Taxonomy;
 use WP_Term;
 
@@ -380,7 +376,6 @@ function create_fields_person(string $key, array $prefs = null): array
             'name'                => 'image',
             'label'               => __('Image', 'app/cms'),
             'label'               => __('Image', 'app/cms'),
-            // 'instructions'        => recommended_image_size( ACF_AVATAR_SMALL_IMAGE_SIZE ),
             'type'                => 'image',
             'required'            => 0,
             'save_post_thumbnail' => 0,
@@ -397,38 +392,6 @@ function create_fields_person(string $key, array $prefs = null): array
     }
 
     return array_values($fields);
-}
-
-/**
- * Retrieves the quote attribution.
- *
- * @param  array $data The field group data.
- * @return array|string|null
- */
-function parse_quote_attribution_data(array $data)
-{
-    if (!isset($data['ref'])) {
-        return null;
-    }
-
-    switch ($data['ref']) {
-        case 'none':
-            return null;
-
-        case 'custom':
-            if (empty($data['caption'])) {
-                return null;
-            }
-
-            return $data['caption'];
-
-        case 'relation':
-            if (empty($data['author'])) {
-                return null;
-            }
-
-            return get_author($data['author']);
-    }
 }
 
 /**
