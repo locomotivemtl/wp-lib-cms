@@ -29,6 +29,7 @@
             "inc/namespace.php",
             "inc/Models/namespace.php",
             "inc/Modules/ACF/namespace.php",
+            "inc/Modules/Polylang/namespace.php",
             "inc/Support/namespace.php"
         ],
         "psr-4": {
