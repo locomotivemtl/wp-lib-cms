@@ -9,20 +9,16 @@
             "homepage": "https://locomotive.ca"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": ">=7.4",
+        "composer/installers": "^1.0 || ^2.0",
         "johnbillion/extended-cpts": "^5.0",
         "mcaskill/wp-ecocide": "dev-main",
         "mcaskill/php-array-insert": "^1.0",
         "wpackagist-plugin/acf-extended": "^0.8",
-        "wpackagist-plugin/advanced-custom-fields-implementation": "^6.0"
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "preferred-install": "dist",
-        "optimize-autoloader": true,
-        "sort-packages": true
+        "wpackagist-plugin/advanced-custom-fields": "^6.0"
     },
     "autoload": {
         "files": [
@@ -36,9 +32,28 @@
             "App\\Cms\\": "inc/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        },
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
     "extra": {
         "branch-alias": {
             "dev-main": "1.x-dev"
+        },
+        "installer-disable": true
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org",
+            "only": [
+                "wpackagist-plugin/*",
+                "wpackagist-theme/*"
+            ]
         }
-    }
+    ]
 }
