@@ -50,15 +50,16 @@ function register_initial_hooks(): void
     }
 
     /** Polylang Compatibility */
+    if ( function_exists('PLL') ) {
+        add_filter('acf/get_taxonomies',        __NAMESPACE__ . '\\filter_pll_taxonomies');
+        add_filter('acf/get_object_taxonomies', __NAMESPACE__ . '\\filter_pll_taxonomies');
 
-    add_filter('acf/get_taxonomies',        __NAMESPACE__ . '\\filter_pll_taxonomies');
-    add_filter('acf/get_object_taxonomies', __NAMESPACE__ . '\\filter_pll_taxonomies');
+        add_action('pll_language_defined',    __NAMESPACE__ . '\\pll_language_defined');
+        add_action('pll_no_language_defined', __NAMESPACE__ . '\\pll_no_language_defined');
 
-    add_action('pll_language_defined',    __NAMESPACE__ . '\\pll_language_defined');
-    add_action('pll_no_language_defined', __NAMESPACE__ . '\\pll_no_language_defined');
-
-    if (is_admin()) {
-        add_action('acf/options_page/submitbox_before_major_actions', __NAMESPACE__ . '\\display_post_languages_meta_box');
+        if (is_admin()) {
+            add_action('acf/options_page/submitbox_before_major_actions', __NAMESPACE__ . '\\display_post_languages_meta_box');
+        }
     }
 }
 
