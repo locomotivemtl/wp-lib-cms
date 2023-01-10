@@ -98,7 +98,7 @@ abstract class AbstractPostType extends AbstractModel implements PostType
     /**
      * Fires after a post type is registered.
      *
-     * @listens XYZ#action:registered_{$post_type}_post_type
+     * @listens action:registered_{$post_type}_post_type
      *
      * @param   WP_Post_Type $post_type_object Arguments used to register the post type.
      * @return  void

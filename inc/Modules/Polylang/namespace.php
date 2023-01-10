@@ -313,7 +313,7 @@ function pll_get_page_uri( $uri, WP_Post $page )
     /**
      * Filters the URI for a page.
      *
-     * @event XYZ#filter:pll_get_page_uri
+     * @event filter:pll_get_page_uri
      *
      * @param string       $uri  Page URI.
      * @param PLL_Language $lang Language object.

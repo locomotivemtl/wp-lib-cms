@@ -130,7 +130,7 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
     /**
      * Fires after a taxonomy is registered.
      *
-     * @listens XYZ#action:registered_{$taxonomy}_taxonomy
+     * @listens action:registered_{$taxonomy}_taxonomy
      *
      * @param   array       $object_types    Object type or array of object types.
      * @param   WP_Taxonomy $taxonomy_object Arguments used to register the taxonomy.

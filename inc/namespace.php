@@ -65,7 +65,7 @@ function remove_twitter_meta_author($data, $args)
 /**
  * Filters the list of paths that are searched for local ACF PHP fields.
  *
- * @listens XYZ#filter:xyz/acf/settings/load_php
+ * @listens filter:xyz/acf/settings/load_php
  *
  * @param   string[] $paths The paths of local ACF fields.
  * @return  string[]
@@ -99,7 +99,7 @@ function provide_extra_hooks(): void
  * @see wp-includes/post.php
  *
  * @listens WP#action:registered_post_type
- * @fires   XYZ#action:registered_{$post_type}_post_type
+ * @fires   action:registered_{$post_type}_post_type
  *
  * @param  string       $post_type        Post type key.
  * @param  WP_Post_Type $post_type_object Arguments used to register the post type.
@@ -112,7 +112,7 @@ function registered_post_type(string $post_type, WP_Post_Type $post_type_object)
      *
      * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
      *
-     * @event XYZ#action:registered_{$post_type}_post_type
+     * @event action:registered_{$post_type}_post_type
      *
      * @param WP_Post_Type $post_type_object Arguments used to register the post type.
      */
@@ -123,7 +123,7 @@ function registered_post_type(string $post_type, WP_Post_Type $post_type_object)
  * Filter the arguments for registering a post type.
  *
  * @listens WP#filter:register_post_type_args
- * @fires   XYZ#filter:register_{$post_type}_post_type_args
+ * @fires   filter:register_{$post_type}_post_type_args
  *
  * @param  array  $args      Array of arguments for registering a post type.
  * @param  string $post_type Post type key.
@@ -136,7 +136,7 @@ function register_post_type_args(array $args, string $post_type): array
      *
      * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
      *
-     * @event XYZ#filter:register_{$post_type}_post_type_args
+     * @event filter:register_{$post_type}_post_type_args
      *
      * @param array  $args      Array of arguments for registering a post type.
      * @param string $post_type Post type key.
@@ -150,7 +150,7 @@ function register_post_type_args(array $args, string $post_type): array
  * @see wp-includes/post.php
  *
  * @listens WP#action:unregistered_post_type
- * @fires   XYZ#action:unregistered_{$post_type}_post_type
+ * @fires   action:unregistered_{$post_type}_post_type
  *
  * @param  string $post_type Post type key.
  * @return void
@@ -162,7 +162,7 @@ function unregistered_post_type(string $post_type): void
      *
      * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
      *
-     * @event XYZ#action:unregistered_{$post_type}_post_type
+     * @event action:unregistered_{$post_type}_post_type
      */
     do_action("unregistered_{$post_type}_post_type");
 }
@@ -171,7 +171,7 @@ function unregistered_post_type(string $post_type): void
  * Fires after a taxonomy is registered.
  *
  * @listens WP#action:registered_taxonomy
- * @fires   XYZ#action:registered_{$taxonomy}_taxonomy
+ * @fires   action:registered_{$taxonomy}_taxonomy
  *
  * @global array $wp_taxonomies
  *
@@ -194,7 +194,7 @@ function registered_taxonomy(string $taxonomy, $object_types): void
      *
      * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
      *
-     * @event XYZ#action:registered_{$taxonomy}_taxonomy
+     * @event action:registered_{$taxonomy}_taxonomy
      *
      * @param array       $object_types    Object type or array of object types.
      * @param WP_Taxonomy $taxonomy_object Arguments used to register the taxonomy.
@@ -208,7 +208,7 @@ function registered_taxonomy(string $taxonomy, $object_types): void
  * @listens filter:register_taxonomy_args
  *
  * @listens WP#filter:register_taxonomy_args
- * @fires   XYZ#filter:register_{$taxonomy}_taxonomy_args
+ * @fires   filter:register_{$taxonomy}_taxonomy_args
  *
  * @param  array  $args         Array of arguments for registering a taxonomy.
  * @param  string $taxonomy     Taxonomy key.
@@ -222,7 +222,7 @@ function register_taxonomy_args(array $args, string $taxonomy, array $object_typ
      *
      * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
      *
-     * @event XYZ#filter:register_{$taxonomy}_taxonomy_args
+     * @event filter:register_{$taxonomy}_taxonomy_args
      *
      * @param array    $args        Array of arguments for registering a taxonomy.
      * @param string   $taxonomy    Taxonomy key.
@@ -235,7 +235,7 @@ function register_taxonomy_args(array $args, string $taxonomy, array $object_typ
  * Fires after a taxonomy was registered.
  *
  * @listens WP#action:unregistered_taxonomy
- * @fires   XYZ#action:unregistered_{$taxonomy}_taxonomy
+ * @fires   action:unregistered_{$taxonomy}_taxonomy
  *
  * @param  string $taxonomy Taxonomy slug.
  * @return void
@@ -247,7 +247,7 @@ function unregistered_taxonomy(string $taxonomy): void
      *
      * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
      *
-     * @event XYZ#action:unregistered_{$taxonomy}_taxonomy
+     * @event action:unregistered_{$taxonomy}_taxonomy
      */
     do_action("unregistered_{$taxonomy}_taxonomy");
 }
@@ -256,7 +256,7 @@ function unregistered_taxonomy(string $taxonomy): void
  * Add `class="thumbnail"` to attachment items
  *
  * @listens WP#filter:wp_get_attachment_link
- * @fires   XYZ#filter:attachment_link_class
+ * @fires   filter:attachment_link_class
  *
  * @param  string      $link_html The page link HTML output.
  * @param  integer     $id        Post ID.
@@ -271,7 +271,7 @@ function attachment_link_class($link_html, int $id, $size, $permalink, $icon, $t
     /**
      * Filter the HTML class attribute for an attachment page link.
      *
-     * @event  XYZ#filter:attachment_link_class
+     * @event  filter:attachment_link_class
      *
      * @param  string      $classes    The HTML class attribute value.
      * @param  integer     $id         Post ID.

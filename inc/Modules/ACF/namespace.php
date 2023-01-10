@@ -138,8 +138,8 @@ function change_field_group_meta_box_priority(string $priority, array $field_gro
  *
  * @listens ACF#filter:acf/pre_render_fields
  *
- * @fires XYZ#filter:acf/pre_render_field
- * @fires XYZ#filter:acf/pre_render_field/type={$field_type}
+ * @fires filter:acf/pre_render_field
+ * @fires filter:acf/pre_render_field/type={$field_type}
  *
  * @param  array      $fields  ACF Field.
  * @param  int|string $post_id The post ID to render fields on.
@@ -188,7 +188,7 @@ function acf_is_field_layout_key($id): bool
     /**
      * Filters whether the $id is a field group key.
      *
-     * @event XYZ#filter:acf/is_field_layout_key
+     * @event filter:acf/is_field_layout_key
      *
      * @param bool   $bool The result.
      * @param string $id   The identifier.
@@ -434,7 +434,7 @@ function pll_no_language_defined(): void
  * Filters the array of taxonomy names to exclude Polylang's custom taxonomies.
  *
  * @listens ACF#filter:acf/get_taxonomies
- * @listens XYZ#filter:acf/get_object_taxonomies
+ * @listens filter:acf/get_object_taxonomies
  *
  * @param  array $taxonomies  An array of taxonomy names.
  * @return array An array of taxonomy names.

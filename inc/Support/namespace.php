@@ -273,7 +273,7 @@ function parse_url_host($url)
 /**
  * Determines whether the current request is a WordPress REST API request.
  *
- * @fires XYZ#filter:is_wp_rest_request
+ * @fires filter:is_wp_rest_request
  *
  * @return bool TRUE if it's a WordPress REST API request, FALSE otherwise.
  */
@@ -282,7 +282,7 @@ function is_wp_rest_request(): bool
     /**
      * Filters whether the current request is a WordPress REST API request.
      *
-     * @event XYZ#filter:is_wp_rest_request
+     * @event filter:is_wp_rest_request
      *
      * @param bool $is_wp_rest_request Whether the current request is a WordPress REST API request.
      */
@@ -292,7 +292,7 @@ function is_wp_rest_request(): bool
 /**
  * Determines whether the current request is a WordPress CLI request.
  *
- * @fires XYZ#filter:is_wp_cli_request
+ * @fires filter:is_wp_cli_request
  *
  * @return bool TRUE if it's a WordPress CLI request, FALSE otherwise.
  */
@@ -301,7 +301,7 @@ function is_wp_cli_request(): bool
     /**
      * Filters whether the current request is a WordPress CLI request.
      *
-     * @event XYZ#filter:is_wp_cli_request
+     * @event filter:is_wp_cli_request
      *
      * @param bool $is_wp_cli_request Whether the current request is a WordPress CLI request.
      */
@@ -311,7 +311,7 @@ function is_wp_cli_request(): bool
 /**
  * Determines whether the current request is a WordPress importer request.
  *
- * @fires XYZ#filter:is_wp_import_request
+ * @fires filter:is_wp_import_request
  *
  * @return bool TRUE if it's a WordPress importer request, FALSE otherwise.
  */
@@ -320,7 +320,7 @@ function is_wp_import_request(): bool
     /**
      * Filters whether the current request is a WordPress importer request.
      *
-     * @event XYZ#filter:is_wp_import_request
+     * @event filter:is_wp_import_request
      *
      * @param bool $is_wp_import_request Whether the current request is a WordPress importer request.
      */
@@ -330,7 +330,7 @@ function is_wp_import_request(): bool
 /**
  * Determines whether the current request is a WordPress XML-RPC request.
  *
- * @fires XYZ#filter:is_wp_xmlrpc_request
+ * @fires filter:is_wp_xmlrpc_request
  *
  * @return bool TRUE if it's a WordPress XML-RPC request, FALSE otherwise.
  */
@@ -339,7 +339,7 @@ function is_wp_xmlrpc_request(): bool
     /**
      * Filters whether the current request is a WordPress XML-RPC request.
      *
-     * @event XYZ#filter:is_wp_xmlrpc_request
+     * @event filter:is_wp_xmlrpc_request
      *
      * @param bool $is_wp_xmlrpc_request Whether the current request is a WordPress XML-RPC request.
      */
@@ -349,7 +349,7 @@ function is_wp_xmlrpc_request(): bool
 /**
  * Determines whether the current request is a WordPress Admin AJAX request.
  *
- * @fires XYZ#filter:is_admin_doing_ajax
+ * @fires filter:is_admin_doing_ajax
  *
  * @return bool TRUE if it's an AJAX request from the WordPress Admin, FALSE otherwise.
  */
@@ -372,7 +372,7 @@ function is_admin_doing_ajax(): bool
     /**
      * Filters whether the current admin request is a WordPress AJAX request.
      *
-     * @event XYZ#filter:is_admin_doing_ajax
+     * @event filter:is_admin_doing_ajax
      *
      * @param bool $wp_doing_ajax Whether the current request is a WordPress Admin AJAX request.
      */
@@ -382,7 +382,7 @@ function is_admin_doing_ajax(): bool
 /**
  * Determines whether the current request is a WordPress Frontend AJAX request.
  *
- * @fires XYZ#filter:is_frontend_doing_ajax
+ * @fires filter:is_frontend_doing_ajax
  *
  * @return bool TRUE if it's an AJAX request from the WordPress Frontend, FALSE otherwise.
  */
@@ -405,7 +405,7 @@ function is_frontend_doing_ajax(): bool
     /**
      * Filters whether the current frontend request is a WordPress AJAX request.
      *
-     * @event XYZ#filter:is_frontend_doing_ajax
+     * @event filter:is_frontend_doing_ajax
      *
      * @param bool $wp_doing_ajax Whether the current request is a frontend WordPress AJAX request.
      */

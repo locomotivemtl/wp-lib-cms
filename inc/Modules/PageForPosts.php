@@ -210,7 +210,7 @@ class PageForPosts implements Bootable
     /**
      * Filters the array of rewrite slugs for the given post type or taxonomy.
      *
-     * @listens XYZ#filter:xyz/model/get_rewrite_slugs
+     * @listens filter:xyz/model/get_rewrite_slugs
      *
      * @param  string[] $slugs An array of permastruct slugs.
      * @param  Model    $model The post type or taxonomy model.
