@@ -10,7 +10,6 @@ use RecursiveIteratorIterator;
 use function App\Cms\Modules\ACF\acf_is_field_layout;
 use function App\Cms\Modules\ACF\acf_is_field_layout_key;
 
-use const App\Cms\ACF_FIELDS_PATH;
 use const WP_CONTENT_DIR;
 
 /**
@@ -18,13 +17,6 @@ use const WP_CONTENT_DIR;
  */
 class Fields implements Bootable
 {
-    /**
-     * Directory path to local PHP fields and groups.
-     *
-     * @var string
-     */
-    protected $local_path;
-
     /**
      * Whether to to enable strict typing of data types.
      *
@@ -45,25 +37,13 @@ class Fields implements Bootable
     protected $strict_files = false;
 
     /**
-     * Sets up the module object.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->local_path = ACF_FIELDS_PATH;
-    }
-
-    /**
      * Boots the module and registers actions and filters.
      *
      * @return void
      */
     public function boot(): void
     {
-        add_action('acf/include_fields', [$this, 'autoload_local_fields']);
-
-        add_filter('acf/format_value', [$this, 'format_empty_value'], 20, 3);
+        add_action('acf/include_fields', [ $this, 'autoload_local_fields' ]);
     }
 
 
@@ -81,7 +61,7 @@ class Fields implements Bootable
     public function register_local_fields(array $structs): void
     {
         if (array_key_exists('key', $structs)) {
-            $structs = [$structs];
+            $structs = [ $structs ];
         }
 
         foreach ($structs as $i => $struct) {
@@ -123,7 +103,32 @@ class Fields implements Bootable
     }
 
     /**
-     * Autoload fields and groups from local PHP files.
+     * Autoload ACF fields and groups from local PHP files.
+     *
+     * @listens ACF#action:acf/include_fields
+     *
+     * @return void
+     * @throws InvalidCustomFieldException
+     */
+    public function autoload_local_fields() : void
+    {
+        /**
+         * Filters the list of paths that are searched for local ACF PHP fields.
+         *
+         * @fires filter:xyz/acf/settings/load_php
+         *
+         * @param  string[] $paths The paths of local ACF fields.
+         * @return string[]
+         */
+        $paths = apply_filters('xyz/acf/settings/load_php', []);
+
+        if (!empty($paths)) {
+            $this->import_local_fields($paths);
+        }
+    }
+
+    /**
+     * Import ACF fields and groups from local PHP files.
      *
      * Notes about `include_once`:
      * - Returns 1 on success, unless overridden by the included file.
@@ -132,58 +137,59 @@ class Fields implements Bootable
      *
      * This method expects the included file will return an array.
      *
-     * @listens ACF#action:acf/include_fields
-     *
+     * @param  string|string[] $paths One or more directory paths.
      * @return void
      * @throws InvalidCustomFieldException
      */
-    public function autoload_local_fields(): void
+    public function import_local_fields($paths) : void
     {
-        if (file_exists($this->local_path)) {
-            $directory = new RecursiveDirectoryIterator($this->local_path);
-            $iterator  = new RecursiveIteratorIterator($directory);
+        foreach ((array) $paths as $path) {
+            if (file_exists($path)) {
+                $directory = new RecursiveDirectoryIterator($path);
+                $iterator  = new RecursiveIteratorIterator($directory);
 
-            foreach ($iterator as $file_path) {
-                if ('php' !== pathinfo($file_path, PATHINFO_EXTENSION)) {
-                    continue;
-                }
+                foreach ($iterator as $file_path) {
+                    if ('php' !== pathinfo($file_path, PATHINFO_EXTENSION)) {
+                        continue;
+                    }
 
-                $contents = include_once $file_path;
+                    $contents = include_once $file_path;
 
-                if (true === $contents) {
-                    // Assume the file has been included previously.
-                    continue;
-                }
+                    if (true === $contents) {
+                        // Assume the file has been included previously.
+                        continue;
+                    }
 
-                if (false === $contents) {
-                    throw new InvalidCustomFieldException(sprintf(
-                        'Local ACF fields file [%s] could not be included',
-                        ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/')
-                    ));
-                }
+                    if (false === $contents) {
+                        throw new InvalidCustomFieldException(sprintf(
+                            'Local ACF fields file [%s] could not be included',
+                            ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/')
+                        ));
+                    }
 
-                $is_empty = empty($contents);
+                    $is_empty = empty($contents);
 
-                if (false === $this->strict_files && ($is_empty || 1 === $contents)) {
-                    // Assume the file is an empty placeholder
-                    continue;
-                }
+                    if (false === $this->strict_files && ($is_empty || 1 === $contents)) {
+                        // Assume the file is an empty placeholder
+                        continue;
+                    }
 
-                if (!is_array($contents) || $is_empty) {
-                    throw new InvalidCustomFieldException(sprintf(
-                        'Local ACF fields file [%s] must return an array of fields and groups, received %s',
-                        ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/'),
-                        (is_object($contents)
-                            ? get_class($contents)
-                            : (is_scalar($contents)
-                                ? var_export($contents, true)
-                                : gettype($contents)
+                    if (!is_array($contents) || $is_empty) {
+                        throw new InvalidCustomFieldException(sprintf(
+                            'Local ACF fields file [%s] must return an array of fields and groups, received %s',
+                            ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/'),
+                            (is_object($contents)
+                                ? get_class($contents)
+                                : (is_scalar($contents)
+                                    ? var_export($contents, true)
+                                    : gettype($contents)
+                                )
                             )
-                        )
-                    ));
-                }
+                        ) );
+                    }
 
-                $this->include_local_fields($contents, $file_path);
+                    $this->include_local_fields($contents, $file_path);
+                }
             }
         }
     }
@@ -199,7 +205,7 @@ class Fields implements Bootable
     protected function include_local_fields(array $structs, string $file_path): void
     {
         if (array_key_exists('key', $structs)) {
-            $structs = [$structs];
+            $structs = [ $structs ];
         }
 
         foreach ($structs as $i => $struct) {
@@ -232,7 +238,14 @@ class Fields implements Bootable
      */
     public function format_empty_value($value, $post_id, $field)
     {
-        if (false === $value) {
+        if ( false === $value && 'true_false' !== $field['type'] ) {
+            if (
+                ( isset( $field['multiple'] ) && $field['multiple'] ) ||
+                ( isset( $field['min'], $field['max'] ) )
+            ) {
+                return [];
+            }
+
             return null;
         }
 

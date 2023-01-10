@@ -43,8 +43,6 @@ function register_initial_hooks(): void
     add_action('plugins_loaded', 'App\\Cms\\Support\\load_textdomain');
     add_filter('sanitize_title', 'App\\Cms\\Support\\sanitize_zero_chars');
 
-    add_filter('xyz/acf/settings/load_php', __NAMESPACE__ . '\\filter_acf_load_php');
-
     add_filter('wpseo_enhanced_slack_data', __NAMESPACE__ . '\\remove_twitter_meta_author', 10, 2);
 }
 
@@ -60,21 +58,6 @@ function remove_twitter_meta_author($data, $args)
         unset($data[$key]);
     }
     return $data;
-}
-
-/**
- * Filters the list of paths that are searched for local ACF PHP fields.
- *
- * @listens filter:xyz/acf/settings/load_php
- *
- * @param   string[] $paths The paths of local ACF fields.
- * @return  string[]
- */
-function filter_acf_load_php(array $paths): array
-{
-    $paths[] = ACF_LAYOUTS_PATH;
-    $paths[] = ACF_FIELDS_PATH;
-    return $paths;
 }
 
 /**
