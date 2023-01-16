@@ -19,29 +19,69 @@ class Admin implements Bootable
     /**
      * Boots the module and registers actions and filters.
      *
+     * @return void
+     */
+    public function boot(): void
+    {
+        $this->register_login_hooks();
+
+        if (is_admin()) {
+            $this->register_admin_hooks();
+            $this->register_plugin_hooks();
+        }
+    }
+
+    /**
+     * Registers required actions and filters for Admin.
+     *
+     * @return void
+     */
+    public function register_admin_hooks(): void
+    {
+        add_action('admin_init',            [$this, 'disable_admin_notifications']);
+        add_action('admin_menu',            [$this, 'admin_menu_order'], 10, 0);
+        add_action('admin_bar_menu',        [$this, 'remove_admin_bar_nodes'], 999);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
+        add_action('wp_dashboard_setup',    [$this, 'disable_dashboard_widgets'], 999);
+        add_filter('wp_editor_settings',    [$this, 'editor_settings'], 10, 2);
+    }
+
+    /**
+     * Registers required actions and filters for {@see wp-login.php Login page}.
+     *
      * Notes:
      * - [1]: Disable login errors for everyone; not knowing whether
      *        the username or password is wrong improves security.
      *
      * @return void
      */
-    public function boot(): void
+    public function register_login_hooks(): void
     {
         /** @see [1] */
         add_filter('login_errors', '__return_null');
 
         add_filter('login_headerurl', [$this, 'login_header_url']);
+    }
 
-        if (is_admin()) {
-            add_action('admin_init',            [$this, 'disable_admin_notifications']);
-            add_action('admin_menu',            [$this, 'admin_menu_order'], 10, 0);
-            add_action('admin_bar_menu',        [$this, 'remove_admin_bar_nodes'], 999);
-            add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
-            add_action('wp_dashboard_setup',    [$this, 'disable_dashboard_widgets'], 999);
-            add_filter('wp_editor_settings',    [$this, 'editor_settings'], 10, 2);
+    /**
+     * Registers required actions and filters for third-party plugins.
+     *
+     * @return void
+     */
+    public function register_plugin_hooks(): void
+    {
+        $this->register_seo_hooks();
+    }
 
-            add_filter('wpseo_metabox_prio',    [$this, 'wpseo_metabox_priority']);
-        }
+    /**
+     * Registers required actions and filters for third-party SEO plugins.
+     *
+     * @return void
+     */
+    public function register_seo_hooks(): void
+    {
+        // Yoast SEO
+        add_filter('wpseo_metabox_prio', [$this, 'metabox_priority_low']);
     }
 
     /**
@@ -59,11 +99,10 @@ class Admin implements Bootable
     }
 
     /**
-     * Fires before the administration menu loads in the admin.
-     *
-     * Moves the 'upload.php' menu item.
+     * Moves the 'upload.php' menu item after most object types.
      *
      * @listens WP#action:admin_menu
+     *     Fires before the administration menu loads in the admin.
      *
      * @global array $menu
      *
@@ -85,9 +124,10 @@ class Admin implements Bootable
     }
 
     /**
-     * Filters the {@see wp_editor()} settings.
+     * Simplifies
      *
      * @listens WP#filter:wp_editor_settings
+     *     Filters the {@see wp_editor()} settings.
      *
      * @param  array  $settings  Array of editor arguments.
      * @param  string $editor_id ID for the current editor instance.
@@ -217,15 +257,18 @@ class Admin implements Bootable
      * @param   WP_Admin_Bar $wp_admin_bar WP_Admin_Bar instance.
      * @return  void
      */
-    public function remove_admin_bar_nodes(WP_Admin_Bar $wp_admin_bar)
+    public function remove_admin_bar_nodes(WP_Admin_Bar $wp_admin_bar): void
     {
         $wp_admin_bar->remove_node('new-user');
     }
 
     /**
+     * Lowers the priority to push the metabox below the content.
+     *
+     * @param  string $priority The metabox priority
      * @return string
      */
-    public function wpseo_metabox_priority()
+    public function metabox_priority_low(string $priority): string
     {
         return 'low';
     }
