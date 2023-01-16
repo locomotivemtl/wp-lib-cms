@@ -67,64 +67,10 @@ function remove_twitter_meta_author($data, $args)
  */
 function provide_extra_hooks(): void
 {
-    add_filter('register_post_type_args', __NAMESPACE__ . '\\register_post_type_args', 10, 2);
-    add_action('registered_post_type',    __NAMESPACE__ . '\\registered_post_type',    10, 2);
-    add_action('unregistered_post_type',  __NAMESPACE__ . '\\unregistered_post_type',  10, 1);
-    add_action('registered_taxonomy',     __NAMESPACE__ . '\\registered_taxonomy',     10, 2);
-    add_filter('register_taxonomy_args',  __NAMESPACE__ . '\\register_taxonomy_args',  10, 3);
-    add_action('unregistered_taxonomy',   __NAMESPACE__ . '\\unregistered_taxonomy',   10, 1);
-    add_filter('wp_get_attachment_link',  __NAMESPACE__ . '\\attachment_link_class',   10, 6);
-}
+    add_action('unregistered_post_type',  __NAMESPACE__ . '\\unregistered_post_type', 10, 1);
+    add_action('unregistered_taxonomy',   __NAMESPACE__ . '\\unregistered_taxonomy',  10, 1);
 
-/**
- * Fires after a post type is registered.
- *
- * @see wp-includes/post.php
- *
- * @listens WP#action:registered_post_type
- * @fires   action:registered_{$post_type}_post_type
- *
- * @param  string       $post_type        Post type key.
- * @param  WP_Post_Type $post_type_object Arguments used to register the post type.
- * @return void
- */
-function registered_post_type(string $post_type, WP_Post_Type $post_type_object): void
-{
-    /**
-     * Fires after a specific post type is registered.
-     *
-     * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
-     *
-     * @event action:registered_{$post_type}_post_type
-     *
-     * @param WP_Post_Type $post_type_object Arguments used to register the post type.
-     */
-    do_action("registered_{$post_type}_post_type", $post_type_object);
-}
-
-/**
- * Filter the arguments for registering a post type.
- *
- * @listens WP#filter:register_post_type_args
- * @fires   filter:register_{$post_type}_post_type_args
- *
- * @param  array  $args      Array of arguments for registering a post type.
- * @param  string $post_type Post type key.
- * @return array  The filtered arguments for registering a post type.
- */
-function register_post_type_args(array $args, string $post_type): array
-{
-    /**
-     * Filter the arguments for registering a specific post type.
-     *
-     * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
-     *
-     * @event filter:register_{$post_type}_post_type_args
-     *
-     * @param array  $args      Array of arguments for registering a post type.
-     * @param string $post_type Post type key.
-     */
-    return apply_filters("register_{$post_type}_post_type_args", $args, $post_type);
+    add_filter('wp_get_attachment_link',  __NAMESPACE__ . '\\attachment_link_class',  10, 6);
 }
 
 /**
@@ -133,7 +79,7 @@ function register_post_type_args(array $args, string $post_type): array
  * @see wp-includes/post.php
  *
  * @listens WP#action:unregistered_post_type
- * @fires   action:unregistered_{$post_type}_post_type
+ * @fires   action:unregistered_post_type_{$post_type}
  *
  * @param  string $post_type Post type key.
  * @return void
@@ -145,80 +91,16 @@ function unregistered_post_type(string $post_type): void
      *
      * The dynamic portion of the hook name, `$post_type`, refers to the post type slug.
      *
-     * @event action:unregistered_{$post_type}_post_type
+     * @event action:unregistered_post_type_{$post_type}
      */
-    do_action("unregistered_{$post_type}_post_type");
-}
-
-/**
- * Fires after a taxonomy is registered.
- *
- * @listens WP#action:registered_taxonomy
- * @fires   action:registered_{$taxonomy}_taxonomy
- *
- * @global array $wp_taxonomies
- *
- * @param  string       $taxonomy     Taxonomy slug.
- * @param  array|string $object_types Object type or array of object types.
- * @return void
- */
-function registered_taxonomy(string $taxonomy, $object_types): void
-{
-    global $wp_taxonomies;
-
-    // Cast to an array, similar to "register_taxonomy_args_type"
-    $object_types = (array) $object_types;
-
-    // Pass the taxonomy object, similar to "registered_post_type"
-    $taxonomy_object = $wp_taxonomies[$taxonomy];
-
-    /**
-     * Fires after a specific taxonomy is registered.
-     *
-     * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
-     *
-     * @event action:registered_{$taxonomy}_taxonomy
-     *
-     * @param array       $object_types    Object type or array of object types.
-     * @param WP_Taxonomy $taxonomy_object Arguments used to register the taxonomy.
-     */
-    do_action("registered_{$taxonomy}_taxonomy", $object_types, $taxonomy_object);
-}
-
-/**
- * Filter the arguments for registering a taxonomy.
- *
- * @listens filter:register_taxonomy_args
- *
- * @listens WP#filter:register_taxonomy_args
- * @fires   filter:register_{$taxonomy}_taxonomy_args
- *
- * @param  array  $args         Array of arguments for registering a taxonomy.
- * @param  string $taxonomy     Taxonomy key.
- * @param  array  $object_types Array of names of object types for the taxonomy.
- * @return array  The filtered arguments for registering a taxonomy.
- */
-function register_taxonomy_args(array $args, string $taxonomy, array $object_types): array
-{
-    /**
-     * Filter the arguments for registering a specific taxonomy.
-     *
-     * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
-     *
-     * @event filter:register_{$taxonomy}_taxonomy_args
-     *
-     * @param array    $args        Array of arguments for registering a taxonomy.
-     * @param string   $taxonomy    Taxonomy key.
-     * @param string[] $object_type Array of names of object types for the taxonomy.
-     */
-    return apply_filters("register_{$taxonomy}_taxonomy_args", $args, $taxonomy, $object_types);
+    do_action("unregistered_post_type_{$post_type}");
 }
 
 /**
  * Fires after a taxonomy was registered.
  *
  * @listens WP#action:unregistered_taxonomy
- * @fires   action:unregistered_{$taxonomy}_taxonomy
+ * @fires   action:unregistered_taxonomy_{$taxonomy}
  *
  * @param  string $taxonomy Taxonomy slug.
  * @return void
@@ -230,9 +112,9 @@ function unregistered_taxonomy(string $taxonomy): void
      *
      * The dynamic portion of the hook name, `$taxonomy`, refers to the taxonomy slug.
      *
-     * @event action:unregistered_{$taxonomy}_taxonomy
+     * @event action:unregistered_taxonomy_{$taxonomy}
      */
-    do_action("unregistered_{$taxonomy}_taxonomy");
+    do_action("unregistered_taxonomy_{$taxonomy}");
 }
 
 /**

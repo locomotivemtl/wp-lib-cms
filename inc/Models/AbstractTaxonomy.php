@@ -62,7 +62,7 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
         maybe_add_filter("register_{$taxonomy}_taxonomy_args", [$this, 'register_taxonomy_args'], 10, 3);
 
         add_action('parse_query', [$this, 'init_query_flag'], 1);
-        add_action("registered_{$taxonomy}_taxonomy", [$this, 'registered_taxonomy'], 0, 2);
+        add_action("registered_taxonomy_{$taxonomy}", [$this, 'registered_taxonomy'], 0, 1);
     }
 
     /**
@@ -130,14 +130,17 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
     /**
      * Fires after a taxonomy is registered.
      *
-     * @listens action:registered_{$taxonomy}_taxonomy
+     * @listens XYZ#action:registered_taxonomy_{$taxonomy}
      *
-     * @param   array       $object_types    Object type or array of object types.
-     * @param   WP_Taxonomy $taxonomy_object Arguments used to register the taxonomy.
-     * @return  void
+     * @global array<string, WP_Taxonomy> $wp_taxonomies
+     *
+     * @param  string $taxonomy Taxonomy slug.
+     * @return void
      */
-    public function registered_taxonomy(array $object_types, WP_Taxonomy $taxonomy_object): void
+    public function registered_taxonomy(string $taxonomy): void
     {
-        $this->wp_taxonomy_object = $taxonomy_object;
+        global $wp_taxonomies;
+
+        $this->wp_taxonomy_object = $wp_taxonomies[$taxonomy];
     }
 }

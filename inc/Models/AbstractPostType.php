@@ -63,7 +63,7 @@ abstract class AbstractPostType extends AbstractModel implements PostType
         maybe_add_filter("register_{$post_type}_post_type_args", [$this, 'register_post_type_args'], 10, 2);
 
         add_action('parse_query', [$this, 'init_query_flag'], 1);
-        add_action("registered_{$post_type}_post_type", [$this, 'registered_post_type'], 0, 1);
+        add_action("registered_post_type_{$post_type}", [$this, 'registered_post_type'], 0, 2);
         add_filter("post_type_labels_{$post_type}", [$this, 'register_post_type_labels'], 99, 1);
     }
 
@@ -98,12 +98,13 @@ abstract class AbstractPostType extends AbstractModel implements PostType
     /**
      * Fires after a post type is registered.
      *
-     * @listens action:registered_{$post_type}_post_type
+     * @listens action:registered_post_type_{$post_type}
      *
+     * @param   string       $post_type        Post type.
      * @param   WP_Post_Type $post_type_object Arguments used to register the post type.
      * @return  void
      */
-    public function registered_post_type(WP_Post_Type $post_type_object): void
+    public function registered_post_type(string $post_type, WP_Post_Type $post_type_object): void
     {
         $this->wp_post_type_object = $post_type_object;
     }
