@@ -42,22 +42,6 @@ function register_initial_hooks(): void
 {
     add_action('plugins_loaded', 'App\\Cms\\Support\\load_textdomain');
     add_filter('sanitize_title', 'App\\Cms\\Support\\sanitize_zero_chars');
-
-    add_filter('wpseo_enhanced_slack_data', __NAMESPACE__ . '\\remove_twitter_meta_author', 10, 2);
-}
-
-/**
- * @param array                  $data The enhanced Slack sharing data.
- * @param Indexable_Presentation $presentation The presentation of an indexable.
- * @return array
- */
-function remove_twitter_meta_author($data, $args)
-{
-    $key = __('Written by', 'wordpress-seo');
-    if (isset($data[$key])) {
-        unset($data[$key]);
-    }
-    return $data;
 }
 
 /**
