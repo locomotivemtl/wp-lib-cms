@@ -80,6 +80,12 @@ class Admin implements Bootable
      */
     public function register_seo_hooks(): void
     {
+        // Slim SEO
+        add_filter('slim_seo_meta_box_priority', [$this, 'metabox_priority_low']);
+
+        // The SEO Framework
+        add_filter('the_seo_framework_metabox_priority', [$this, 'metabox_priority_low']);
+
         // Yoast SEO
         add_filter('wpseo_metabox_prio', [$this, 'metabox_priority_low']);
     }
