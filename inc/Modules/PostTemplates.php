@@ -2,8 +2,8 @@
 
 namespace App\Cms\Modules;
 
-use InvalidArgumentException;
 use App\Cms\Contracts\Bootable;
+use InvalidArgumentException;
 use WP_Post;
 
 /**
@@ -27,6 +27,10 @@ class PostTemplates implements Bootable
      */
     public function boot(): void
     {
+        if (!is_admin()) {
+            return;
+        }
+
         // Defer booting until admin is ready
         if (!did_action('load-edit.php')) {
             if (!has_filter('load-edit.php', [$this, 'boot'])) {
@@ -51,7 +55,6 @@ class PostTemplates implements Bootable
             return;
         }
 
-
         add_filter("manage_{$post_type}_posts_columns",       [$this, 'add_template_column']);
         add_action("manage_{$post_type}_posts_custom_column", [$this, 'display_template_column_output'], 10, 2);
         add_filter("manage_{$screen_id}_sortable_columns",    [$this, 'register_sortable_template_column']);
@@ -66,10 +69,10 @@ class PostTemplates implements Bootable
      * @listens WP#filter:manage_{$post_type}_posts_columns
      *     Filters the columns displayed in the Posts list table for a specific post type.
      *
-     * @param  array $post_columns An array of column names.
-     * @return array
+     * @param  array<string, string> $post_columns An array of column names.
+     * @return array<string, string>
      */
-    public function add_template_column($post_columns)
+    public function add_template_column(array $post_columns): array
     {
         $columns = [
             'template' => __('Template'),
@@ -96,7 +99,7 @@ class PostTemplates implements Bootable
      * @param  integer $post_id     The current post ID.
      * @return void
      */
-    public function display_template_column_output($column_name, $post_id)
+    public function display_template_column_output(string $column_name, int $post_id): void
     {
         if ('template' !== $column_name) {
             return;
@@ -114,7 +117,7 @@ class PostTemplates implements Bootable
          * @param  string  $template The current post's assigned post template.
          * @param  integer $post_id  The current post ID.
          */
-        echo apply_filters('xyz/post-templates/column/output', $template_name, $template_path, $post_id);
+        echo apply_filters('xyz/post-templates/column/output', (string) $template_name, $template_path, $post_id);
     }
 
     /**
@@ -122,10 +125,10 @@ class PostTemplates implements Bootable
      *
      * @listens WP#filter:manage_edit-page_sortable_columns
      *
-     * @param   array $sortable_columns An array of sortable columns.
-     * @return  array $sortable_columns
+     * @param  array<string, string> $sortable_columns An array of sortable columns.
+     * @return array<string, string> $sortable_columns
      */
-    public function register_sortable_template_column($sortable_columns)
+    public function register_sortable_template_column(array $sortable_columns): array
     {
         $sortable_columns['template'] = 'template';
 
@@ -137,10 +140,10 @@ class PostTemplates implements Bootable
      *
      * @listens WP#filter:request
      *
-     * @param   array $query_vars The array of requested query variables.
-     * @return  array $query_vars
+     * @param  array<string, string> $query_vars The array of requested query variables.
+     * @return array<string, string> $query_vars
      */
-    public function order_template_column($query_vars)
+    public function order_template_column(array $query_vars): array
     {
         $vars = [];
 
@@ -162,7 +165,7 @@ class PostTemplates implements Bootable
      * @param  string $output The value of the cell to display.
      * @return string
      */
-    public function get_default_post_template_output($output)
+    public function get_default_post_template_output(string $output): string
     {
         if (!$output) {
             /** This filter is documented in wp-admin/includes/meta-boxes.php */
@@ -185,7 +188,7 @@ class PostTemplates implements Bootable
      *
      * @throws InvalidArgumentException If the post is invalid.
      */
-    public function get_post_template_name($post)
+    public function get_post_template_name($post): ?string
     {
         $post = get_post($post);
 
