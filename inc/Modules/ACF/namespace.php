@@ -40,7 +40,9 @@ function create_initial_constants(): void
  */
 function register_initial_hooks(): void
 {
-    add_filter('acf/settings/show_admin', '__return_false');
+    if (!in_array(wp_get_environment_type(), ['local', 'development'], true)) {
+        add_filter('acf/settings/show_admin', '__return_false');
+    }
 
     add_action('acf/init', __NAMESPACE__ . '\\acf_init');
 
