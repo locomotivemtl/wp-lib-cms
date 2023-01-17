@@ -48,17 +48,18 @@ class Admin implements Bootable
      * Registers required actions and filters for {@see wp-login.php Login page}.
      *
      * Notes:
-     * - [1]: Disable login errors for everyone; not knowing whether
+     * - [1]: Hides login errors for everyone; not knowing whether
      *        the username or password is wrong improves security.
-     *
-     * @return void
+     * - [2]: Replaces login header URL, which defaults to wordpress.org
+     *        for unknown reason, with the home page URL.
      */
     public function register_login_hooks(): void
     {
         /** @see [1] */
-        add_filter('login_errors', '__return_null');
+        add_filter('login_errors', '__return_null', 50, 0);
 
-        add_filter('login_headerurl', [$this, 'login_header_url']);
+        /** @see [2] */
+        add_filter('login_headerurl', 'home_url', 10, 0);
     }
 
     /**
@@ -86,20 +87,6 @@ class Admin implements Bootable
 
         // Yoast SEO
         add_filter('wpseo_metabox_prio', [$this, 'metabox_priority_low']);
-    }
-
-    /**
-     * Changes the login header URL to the current site.
-     *
-     * Defaults to wordpress.org for unknown reason.
-     *
-     * @listens WP#filter:login_headerurl
-     *
-     * @return string
-     */
-    public function login_header_url(): string
-    {
-        return home_url('/');
     }
 
     /**
