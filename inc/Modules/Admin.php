@@ -205,34 +205,35 @@ class Admin implements Bootable
      * Disable dashboard widgets
      *
      * @listens WP#action:wp_dashboard_setup
-     * @see     https://digwp.com/2014/02/disable-default-dashboard-widgets/
+     *
      * @return  void
      */
     public function disable_dashboard_widgets(): void
     {
-        global $wp_meta_boxes;
-
         // WordPress
-        # unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_activity']);
-        # unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']);
-        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
-        unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
-        unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_recent_drafts']);
+        remove_meta_box('dashboard_primary',       'dashboard', 'side');
+        remove_meta_box('dashboard_secondary',     'dashboard', 'side');
+
+        // remove_meta_box('dashboard_activity',          'dashboard', 'normal');
+        // remove_meta_box('dashboard_browser_nag',       'dashboard', 'normal');
+        remove_meta_box('dashboard_incoming_links',    'dashboard', 'normal');
+        // remove_meta_box('dashboard_php_nag',           'dashboard', 'normal');
+        remove_meta_box('dashboard_plugins',           'dashboard', 'normal');
+        // remove_meta_box('dashboard_right_now',         'dashboard', 'normal');
+        // remove_meta_box('health_check_status',         'dashboard', 'normal');
+        // remove_meta_box('network_dashboard_right_now', 'dashboard', 'normal');
 
         // BBPress
-        unset($wp_meta_boxes['dashboard']['normal']['core']['bbp-dashboard-right-now']);
+        remove_meta_box('bbp-dashboard-right-now', 'dashboard', 'normal');
 
         // Yoast SEO
-        unset($wp_meta_boxes['dashboard']['normal']['core']['yoast_db_widget']);
+        remove_meta_box('yoast_db_widget', 'dashboard', 'normal');
 
         // Gravity Forms
-        unset($wp_meta_boxes['dashboard']['normal']['core']['rg_forms_dashboard']);
+        remove_meta_box('rg_forms_dashboard', 'dashboard', 'normal');
 
         // WPML
-        unset($wp_meta_boxes['dashboard']['side']['core']['icl_dashboard_widget']);
+        remove_meta_box('icl_dashboard_widget', 'dashboard', 'side');
     }
 
     /**
