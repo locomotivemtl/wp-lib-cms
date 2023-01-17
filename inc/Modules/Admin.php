@@ -80,13 +80,13 @@ class Admin implements Bootable
     public function register_seo_hooks(): void
     {
         // Slim SEO
-        add_filter('slim_seo_meta_box_priority', [$this, 'metabox_priority_low']);
+        add_filter('slim_seo_meta_box_priority', [$this, 'get_metabox_priority_low'], 20, 0);
 
         // The SEO Framework
-        add_filter('the_seo_framework_metabox_priority', [$this, 'metabox_priority_low']);
+        add_filter('the_seo_framework_metabox_priority', [$this, 'get_metabox_priority_low'], 20, 0);
 
         // Yoast SEO
-        add_filter('wpseo_metabox_prio', [$this, 'metabox_priority_low']);
+        add_filter('wpseo_metabox_prio', [$this, 'get_metabox_priority_low'], 20, 0);
     }
 
     /**
@@ -183,12 +183,9 @@ class Admin implements Bootable
     }
 
     /**
-     * Lowers the priority to push the metabox below the content.
-     *
-     * @param  string $priority The metabox priority
-     * @return string
+     * Returns a 'low' priority to to push a metabox below the content.
      */
-    public function metabox_priority_low(string $priority): string
+    public function get_metabox_priority_low(): string
     {
         return 'low';
     }
