@@ -18,8 +18,6 @@ class Admin implements Bootable
 {
     /**
      * Boots the module and registers actions and filters.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -33,15 +31,13 @@ class Admin implements Bootable
 
     /**
      * Registers required actions and filters for Admin.
-     *
-     * @return void
      */
     public function register_admin_hooks(): void
     {
-        add_action('admin_init',            [$this, 'disable_admin_notifications']);
-        add_action('admin_menu',            [$this, 'admin_menu_order'], 10, 0);
-        add_action('admin_bar_menu',        [$this, 'remove_admin_bar_nodes'], 999);
-        add_action('wp_dashboard_setup',    [$this, 'disable_dashboard_widgets'], 999);
+        add_action('admin_init',         [$this, 'disable_admin_notifications']);
+        add_action('admin_menu',         [$this, 'change_admin_menu'], 10, 0);
+        add_action('admin_bar_menu',     [$this, 'change_admin_bar_menu'], 50);
+        add_action('wp_dashboard_setup', [$this, 'change_dashboard_widgets'], 50);
     }
 
     /**
@@ -64,8 +60,6 @@ class Admin implements Bootable
 
     /**
      * Registers required actions and filters for third-party plugins.
-     *
-     * @return void
      */
     public function register_plugin_hooks(): void
     {
@@ -74,8 +68,6 @@ class Admin implements Bootable
 
     /**
      * Registers required actions and filters for third-party SEO plugins.
-     *
-     * @return void
      */
     public function register_seo_hooks(): void
     {
@@ -90,16 +82,31 @@ class Admin implements Bootable
     }
 
     /**
-     * Moves the 'upload.php' menu item after most object types.
+     * Changes the toolbar menu nodes.
      *
-     * @listens WP#action:admin_menu
-     *     Fires before the administration menu loads in the admin.
+     * Changes:
+     * - Removes New User
+     *
+     * @listens action:admin_bar_menu
+     *
+     * @param WP_Admin_Bar $wp_admin_bar WP_Admin_Bar instance.
+     */
+    public function change_admin_bar_menu(WP_Admin_Bar $wp_admin_bar): void
+    {
+        $wp_admin_bar->remove_node('new-user');
+    }
+
+    /**
+     * Changes the sidebar menu items.
+     *
+     * Changes:
+     * - Moves the 'upload.php' menu item after most object types.
+     *
+     * @listens action:admin_menu
      *
      * @global array $menu
-     *
-     * @return void
      */
-    public function admin_menu_order(): void
+    public function change_admin_menu(): void
     {
         global $menu;
 
@@ -117,11 +124,11 @@ class Admin implements Bootable
     /**
      * Disable dashboard widgets
      *
-     * @listens WP#action:wp_dashboard_setup
+     * @listens action:wp_dashboard_setup
      *
      * @return  void
      */
-    public function disable_dashboard_widgets(): void
+    public function change_dashboard_widgets(): void
     {
         // WordPress
         remove_meta_box('dashboard_primary',       'dashboard', 'side');
@@ -153,10 +160,10 @@ class Admin implements Bootable
      * Disable various on-screen notifications.
      *
      * Disable WordPress version checks for non-administrators.
+     *
      * Leave updating to the professionals.
      *
-     * @listens WP#action:admin_init
-     * @return  void
+     * @listens action:admin_init
      */
     public function disable_admin_notifications(): void
     {
@@ -165,21 +172,6 @@ class Admin implements Bootable
             remove_action('admin_init', '_maybe_update_core');
             add_filter('pre_transient_update_core', '__return_null');
         }
-    }
-
-    /**
-     * Remove unnecessary Administration Toolbar Nodes
-     *
-     * Removes:
-     * 1. New ("+") → User
-     *
-     * @listens WP#action:admin_bar_menu
-     * @param   WP_Admin_Bar $wp_admin_bar WP_Admin_Bar instance.
-     * @return  void
-     */
-    public function remove_admin_bar_nodes(WP_Admin_Bar $wp_admin_bar): void
-    {
-        $wp_admin_bar->remove_node('new-user');
     }
 
     /**
