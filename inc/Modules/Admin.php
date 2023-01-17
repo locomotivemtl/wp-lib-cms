@@ -41,9 +41,7 @@ class Admin implements Bootable
         add_action('admin_init',            [$this, 'disable_admin_notifications']);
         add_action('admin_menu',            [$this, 'admin_menu_order'], 10, 0);
         add_action('admin_bar_menu',        [$this, 'remove_admin_bar_nodes'], 999);
-        add_action('admin_enqueue_scripts', [$this, 'enqueue_assets']);
         add_action('wp_dashboard_setup',    [$this, 'disable_dashboard_widgets'], 999);
-        add_filter('wp_editor_settings',    [$this, 'editor_settings'], 10, 2);
     }
 
     /**
@@ -127,78 +125,6 @@ class Admin implements Bootable
         $menu['30'] = $menu[$key];
 
         unset($menu[$key]);
-    }
-
-    /**
-     * Simplifies
-     *
-     * @listens WP#filter:wp_editor_settings
-     *     Filters the {@see wp_editor()} settings.
-     *
-     * @param  array  $settings  Array of editor arguments.
-     * @param  string $editor_id ID for the current editor instance.
-     * @return void
-     */
-    public function editor_settings($settings, $editor_id): array
-    {
-        $simplify = false;
-
-        /*
-        if ( 'content' === $editor_id && in_array( get_post_type(), [  ] ) ) {
-            $simplify = true;
-        }
-        */
-
-        if ($simplify) {
-            $settings = wp_parse_args([
-                'media_buttons' => false,
-                'tinymce'       => [
-                    'toolbar1'  => 'bold,italic,link,unlink,undo,redo',
-                ],
-                'quicktags'     => [
-                    'buttons'   => 'strong,em,link,close',
-                ],
-            ], $settings);
-        }
-
-        return $settings;
-    }
-
-    /**
-     * Register core taxonomies.
-     *
-     * @listens WP#action:admin_enqueue_scripts
-     * @return  void
-     */
-    public function enqueue_assets(): void
-    {
-        wp_enqueue_style(
-            'app-cms-admin',
-            uri('resources/styles/admin.css'),
-            [],
-            VERSION,
-            'all'
-        );
-
-        wp_enqueue_style(
-            'app-cms-acf',
-            uri('resources/styles/acf.css'),
-            [
-                'acf-field-group',
-            ],
-            VERSION,
-            'all'
-        );
-
-        wp_enqueue_script(
-            'app-cms-acf',
-            uri('resources/scripts/acf.js'),
-            [
-                'acf-input',
-                'select2',
-            ],
-            VERSION
-        );
     }
 
     /**
