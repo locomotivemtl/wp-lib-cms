@@ -184,13 +184,13 @@ class FieldTypes implements Bootable
      * @listens filter:acf/get_field_group_style
      *     Filters the generated CSS styles for field groups.
      *
-     * @param  ?string $style The CSS styles.
-     * @return ?string
+     * @param  string $style The CSS styles.
+     * @return string
      */
-    public function filter_field_group_style(?string $style): ?string
+    public function filter_field_group_style(string $style): string
     {
         if (' {display: none;}' === $style) {
-            return null;
+            return '';
         }
 
         return $style;
