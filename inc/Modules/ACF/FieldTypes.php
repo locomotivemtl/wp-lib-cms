@@ -68,6 +68,9 @@ class FieldTypes implements Bootable
         add_filter('acf/format_value/type=group',            [$this, 'format_value_for_sub_fields'], 20, 3);
         add_filter('acf/format_value/type=repeater',         [$this, 'format_value_for_sub_fields'], 20, 3);
 
+        add_filter('acf/format_value/type=number',           'acf_format_numerics', 20, 1);
+        add_filter('acf/format_value/type=ranger',           'acf_format_numerics', 20, 1);
+
         // Trim whitespace before and after multi-line values.
         add_filter('acf/format_value/type=textarea',         'trim', 20, 1);
         add_filter('acf/format_value/type=wysiwyg',          'trim', 20, 1);
