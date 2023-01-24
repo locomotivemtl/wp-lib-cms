@@ -63,6 +63,10 @@ class FieldTypes implements Bootable
         add_filter('acf/load_value/type=flexible_content',   [$this, 'load_value_for_flexible_content'], 10, 3);
         add_filter('acf/load_value/type=image',              [$this, 'load_value_for_wp_post_thumbnail'], 10, 3);
 
+        // Trim whitespace before and after multi-line values.
+        add_filter('acf/format_value/type=textarea',         'trim', 20, 1);
+        add_filter('acf/format_value/type=wysiwyg',          'trim', 20, 1);
+
         add_filter('acf/format_value/type=oembed',           [$this, 'format_value_for_oembed'], 10, 3);
         add_filter('acf/validate_value/type=text',           [$this, 'validate_value_for_constraint_pattern'], 10, 3);
         add_filter('acf/pre_update_value/type=image',        [$this, 'pre_update_value_for_wp_post_thumbnail'], 10, 4);
