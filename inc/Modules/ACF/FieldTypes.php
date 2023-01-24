@@ -63,6 +63,11 @@ class FieldTypes implements Bootable
         add_filter('acf/load_value/type=flexible_content',   [$this, 'load_value_for_flexible_content'], 10, 3);
         add_filter('acf/load_value/type=image',              [$this, 'load_value_for_wp_post_thumbnail'], 10, 3);
 
+        add_filter('acf/format_value/type=clone',            [$this, 'format_value_for_sub_fields'], 20, 3);
+        add_filter('acf/format_value/type=flexible_content', [$this, 'format_value_for_sub_fields'], 20, 3);
+        add_filter('acf/format_value/type=group',            [$this, 'format_value_for_sub_fields'], 20, 3);
+        add_filter('acf/format_value/type=repeater',         [$this, 'format_value_for_sub_fields'], 20, 3);
+
         // Trim whitespace before and after multi-line values.
         add_filter('acf/format_value/type=textarea',         'trim', 20, 1);
         add_filter('acf/format_value/type=wysiwyg',          'trim', 20, 1);
@@ -204,6 +209,39 @@ class FieldTypes implements Bootable
 
     // Field Type: Flexible Content
     // =========================================================================
+
+    /**
+     * Format the sub field values after it is loaded from the database.
+     *
+     * Removes array elements for Tab and Message field types, which mostly
+     * result in an empty key/value pair (`'' => null`).
+     *
+     * @listens filter:acf/format_value/type=clone
+     * @listens filter:acf/format_value/type=flexible_content
+     * @listens filter:acf/format_value/type=group
+     * @listens filter:acf/format_value/type=repeater
+     *
+     * @param  mixed   $value   The value which was loaded from the database.
+     * @param  int|string $post_id The post ID from which the value was loaded.
+     * @param  array   $field   The field structure.
+     * @return mixed
+     */
+    public function format_value_for_sub_fields($value, $post_id, $field)
+    {
+        if (is_array($value)) {
+            unset($value['']);
+
+            /** @todo PHP 8.1: Wrap loop in `array_is_list()` */
+            // Loop through layouts
+            foreach ($value as $i => $v) {
+                if (is_array($v)) {
+                    unset($value[$i]['']);
+                }
+            }
+        }
+
+        return $value;
+    }
 
     /**
      * Modify the value of a Flexible Content field after it is loaded from the database.
