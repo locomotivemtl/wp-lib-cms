@@ -265,19 +265,51 @@ function create_field_layouts(array $layouts, array $prefs = null): array
 }
 
 /**
- * Generate a "Tab" field.
+ * Generate a "Column" field.
  *
- * @param  array $prefs Field customizations.
- * @return array
+ * @param  array<string, mixed>|bool|string $prefs Field customizations.
+ * @return array<string, mixed>
  */
-function create_field_tab(array $prefs = null): array
+function create_field_column(array|bool|int|string $prefs): array
 {
     $field = [
-        'key'  => uniqid('field_tab_'),
+        'key'  => uniqid('field__column_'),
+        'type' => 'acfe_column',
+    ];
+
+    if (is_bool($prefs) || is_int($prefs)) {
+        $field['endpoint'] = (int) $prefs;
+        return $field;
+    }
+
+    if (is_string($prefs)) {
+        $field['columns'] = $prefs;
+        return $field;
+    }
+
+    return array_replace_recursive($field, $prefs);
+}
+
+/**
+ * Generate a "Tab" field.
+ *
+ * @param  array<string, mixed>|bool|int|string $prefs Field customizations.
+ * @return array<string, mixed>
+ */
+function create_field_tab(array|bool|int|string $prefs): array
+{
+    $field = [
+        'key'  => uniqid('field__tab_'),
         'type' => 'tab',
     ];
 
-    if ($prefs === null) {
+    if (is_bool($prefs) || is_int($prefs)) {
+        $field['endpoint'] = (int) $prefs;
+        return $field;
+    }
+
+    if (is_string($prefs)) {
+        $field['label'] = $prefs;
         return $field;
     }
 
@@ -287,17 +319,18 @@ function create_field_tab(array $prefs = null): array
 /**
  * Generate a "Message" field.
  *
- * @param  array $prefs Field customizations.
- * @return array
+ * @param  array<string, mixed>|string $prefs Field customizations.
+ * @return array<string, mixed>
  */
-function create_field_message(array $prefs = null): array
+function create_field_message(array|string $prefs): array
 {
     $field = [
-        'key'  => uniqid('field_message_'),
+        'key'  => uniqid('field__message_'),
         'type' => 'message',
     ];
 
-    if ($prefs === null) {
+    if (is_string($prefs)) {
+        $field['message'] = $prefs;
         return $field;
     }
 

@@ -216,8 +216,8 @@ class FieldTypes implements Bootable
     /**
      * Format the sub field values after it is loaded from the database.
      *
-     * Removes array elements for Tab and Message field types, which mostly
-     * result in an empty key/value pair (`'' => null`).
+     * Removes array elements for Column, Tab, and Message field types,
+     * which mostly result in an empty key/value pair (`'' => null`).
      *
      * @listens filter:acf/format_value/type=clone
      * @listens filter:acf/format_value/type=flexible_content
