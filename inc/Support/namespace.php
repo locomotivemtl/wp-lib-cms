@@ -150,43 +150,113 @@ function get_image_size(string $name): ?array
 }
 
 /**
- * Build a localized sentence recommending a particular image size.
+ * Parses the image size array shape.
  *
- * @param  int|array  $width  Width or size.
- * @param  int|null   $height Height.
- * @param  float|null $ratio  Ratio.
- * @return string
+ * @param  (int|float)[]|array<string, (int|float)> $size
+ * @return array{width: int, height: int, ratio: int|float|null}
  * @throws InvalidArgumentException If parameters are missing or invalid.
  */
-function recommended_image_size($width, $height = null, $ratio = null): string
+function _parse_image_array(array $size): array
 {
-    if (is_array($width)) {
-        $size = $width;
-        $num  = count($size);
+    $width  = ($size['width']  ?? $size[0] ?? null);
+    $height = ($size['height'] ?? $size[1] ?? null);
+    $ratio  = ($size['ratio']  ?? $size[2] ?? null);
 
-        if (isset($size['width'], $size['height'])) {
-            $width  = $size['width'];
-            $height = $size['height'];
-        } elseif (3 === $num) {
-            [$width, $height, $ratio] = $size;
-        } elseif (2 === $num) {
-            [$width, $height] = $size;
-        } else {
-            throw new InvalidArgumentException(
-                'Expected valid size array'
-            );
-        }
-    }
-
-    if (null === $width || null === $height) {
+    if (!is_int($width) || !is_int($height)) {
         throw new InvalidArgumentException(
-            'Expected valid width and height'
+            'Expected a size array to contain width and height as integers'
         );
     }
 
-    if (null === $ratio && $width !== $height) {
+    if (!is_null($ratio) && !is_numeric($ratio)) {
+        throw new InvalidArgumentException(
+            'Expected size array to contain a numeric ratio'
+        );
+    }
+
+    return [
+        'width'  => $width,
+        'height' => $height,
+        'ratio'  => $ratio,
+    ];
+}
+
+/**
+ * Parses the image size.
+ *
+ * @param  (int|float)[]|int $width  Width or size.
+ * @param  int|null          $height Height.
+ * @param  int|float|null    $ratio  Ratio.
+ * @return array{width: int, height: int, ratio: int|float|null}
+ * @throws InvalidArgumentException If parameters are missing or invalid.
+ */
+function _parse_image_size($width, $height = null, $ratio = null): array
+{
+    if (is_array($width)) {
+        [
+            'width'  => $width,
+            'height' => $height,
+            'ratio'  => $ratio,
+        ] = _parse_image_array($width);
+    } elseif (!is_int($width) || !is_int($height)) {
+        throw new InvalidArgumentException(
+            'Expected a valid width and height'
+        );
+    }
+
+    if (is_null($ratio) && $width !== $height) {
         $ratio = round(($width / $height), 2);
     }
+
+    return [
+        'width'  => $width,
+        'height' => $height,
+        'ratio'  => $ratio,
+    ];
+}
+
+/**
+ * Build a localized sentence recommending a minimum image size.
+ *
+ * @param  (int|float)[]|int $width  Width or size.
+ * @param  int|null          $height Height.
+ * @param  int|float|null    $ratio  Ratio.
+ * @return string
+ */
+function minimum_image_size($width, $height = null, $ratio = null): string
+{
+    [
+        'width'  => $width,
+        'height' => $height,
+        'ratio'  => $ratio,
+    ] = _parse_image_size($width, $height, $ratio);
+
+    if ($ratio) {
+        /* translators: 1: Width, 2: Height, 3: Ratio. */
+        $text = _x('Minimum image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
+        return sprintf($text, $width, $height, $ratio);
+    }
+
+    /* translators: 1: Width, 2: Height. */
+    $text = _x('Minimum image size: %d×%d.', 'image size: width x height', 'app/cms');
+    return sprintf($text, $width, $height);
+}
+
+/**
+ * Build a localized sentence recommending a particular image size.
+ *
+ * @param  (int|float)[]|int $width  Width or size.
+ * @param  int|null          $height Height.
+ * @param  int|float|null    $ratio  Ratio.
+ * @return string
+ */
+function recommended_image_size($width, $height = null, $ratio = null): string
+{
+    [
+        'width'  => $width,
+        'height' => $height,
+        'ratio'  => $ratio,
+    ] = _parse_image_size($width, $height, $ratio);
 
     if ($ratio) {
         /* translators: 1: Width, 2: Height, 3: Ratio. */
@@ -202,30 +272,20 @@ function recommended_image_size($width, $height = null, $ratio = null): string
 /**
  * Build a localized sentence recommending an SVG image or a particular image size.
  *
- * @param  int|array|null $width  Width or size.
- * @param  int|null       $height Height.
- * @param  float|null     $ratio  Ratio.
+ * @param  (int|float)[]|int $width  Width or size.
+ * @param  int|null          $height Height.
+ * @param  int|float|null    $ratio  Ratio.
  * @throws InvalidArgumentException If parameters are missing or invalid.
  * @return string
  */
 function recommended_svg_image($width = null, $height = null, $ratio = null): string
 {
     if (is_array($width)) {
-        $size = $width;
-        $num  = count($size);
-
-        if (isset($size['width'], $size['height'])) {
-            $width  = $size['width'];
-            $height = $size['height'];
-        } elseif (3 === $num) {
-            [$width, $height, $ratio] = $size;
-        } elseif (2 === $num) {
-            [$width, $height] = $size;
-        } else {
-            throw new InvalidArgumentException(
-                'Expected valid size array'
-            );
-        }
+        [
+            'width'  => $width,
+            'height' => $height,
+            'ratio'  => $ratio,
+        ] = _parse_image_array($width);
     }
 
     if ($width && $height) {
