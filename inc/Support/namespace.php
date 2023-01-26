@@ -704,3 +704,47 @@ function get_edit_link(array $args, string $label, string $class = ''): string
         $label
     );
 }
+
+/**
+ * Returns a 'high' meta box priority.
+ *
+ * Useful for returning true to filters easily.
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
+function __return_metabox_priority_high(): string
+{
+    return 'high';
+}
+
+/**
+ * Returns a 'core' meta box priority.
+ *
+ * Useful for returning true to filters easily.
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
+function __return_metabox_priority_core(): string
+{
+    return 'core';
+}
+
+/**
+ * Returns a 'default' meta box priority.
+ *
+ * Useful for returning true to filters easily.
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
+function __return_metabox_priority_default(): string
+{
+    return 'default';
+}
+
+/**
+ * Returns a 'low' meta box priority.
+ *
+ * Useful for returning true to filters easily.
+ */
+// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionDoubleUnderscore,PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.FunctionDoubleUnderscore
+function __return_metabox_priority_low(): string
+{
+    return 'low';
+}
