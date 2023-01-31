@@ -287,6 +287,10 @@ function create_field_column(array|bool|int|string $prefs): array
         return $field;
     }
 
+    if (isset($prefs['border'])) {
+        $prefs['border'] = (array) $prefs['border'];
+    }
+
     return array_replace_recursive($field, $prefs);
 }
 
