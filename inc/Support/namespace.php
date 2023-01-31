@@ -313,21 +313,19 @@ function recommended_svg_image($width = null, $height = null, $ratio = null): st
  * @param  string  $url  The URL to parse.
  * @return string|null
  */
-function parse_url_host($url)
+function parse_url_host(string $url): ?string
 {
-    if (empty($url)) {
+    if (!$url) {
         return null;
     }
 
     $host = parse_url($url, PHP_URL_HOST);
 
-    if (empty($host)) {
+    if (!$host) {
         return null;
     }
 
-    $host = str_replace('www.', '', $host);
-
-    return $host;
+    return str_replace('www.', '', $host);
 }
 
 /**
