@@ -329,6 +329,39 @@ function parse_url_host(string $url): ?string
 }
 
 /**
+ * Convert a URL into a link array structure.
+ *
+ * If the URL has a different origin, the target will be "_blank".
+ *
+ * @param  string      $url      The URL to convert.
+ * @param  string|bool $external If the URL has a different origin and $external is:
+ *     - string: the target will be that value.
+ *     - `true`: the target will be "_blank".
+ *     - `false`: the target will be `null`.
+ * @return array<string, mixed> The link array structure.
+ */
+function convert_url_to_link_array(string $url, $external = false) : array
+{
+    if ($external) {
+        if (is_bool($external)) {
+            $external = '_blank';
+        };
+
+        $host = parse_url($url, PHP_URL_HOST);
+        if ($host) {
+            $_host  = parse_url(home_url(), PHP_URL_HOST);
+            $target = ($host !== $_host) ? $external : null;
+        }
+    }
+
+    return [
+        'title'  => parse_url_host($url),
+        'url'    => $url,
+        'target' => ($target ?? null),
+    ];
+}
+
+/**
  * Determines whether the current request is a WordPress REST API request.
  *
  * @fires filter:is_wp_rest_request
