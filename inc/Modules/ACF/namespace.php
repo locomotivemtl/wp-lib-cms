@@ -270,7 +270,7 @@ function create_field_layouts(array $layouts, array $prefs = null): array
  * @param  array<string, mixed>|bool|string $prefs Field customizations.
  * @return array<string, mixed>
  */
-function create_field_column(array|bool|int|string $prefs): array
+function create_field_column($prefs): array
 {
     $field = [
         'key'  => uniqid('field__column_'),
@@ -300,7 +300,7 @@ function create_field_column(array|bool|int|string $prefs): array
  * @param  array<string, mixed>|bool|int|string $prefs Field customizations.
  * @return array<string, mixed>
  */
-function create_field_tab(array|bool|int|string $prefs): array
+function create_field_tab($prefs): array
 {
     $field = [
         'key'  => uniqid('field__tab_'),
@@ -326,7 +326,7 @@ function create_field_tab(array|bool|int|string $prefs): array
  * @param  array<string, mixed>|string $prefs Field customizations.
  * @return array<string, mixed>
  */
-function create_field_message(array|string $prefs): array
+function create_field_message($prefs): array
 {
     $field = [
         'key'  => uniqid('field__message_'),
