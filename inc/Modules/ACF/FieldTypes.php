@@ -20,34 +20,11 @@ class FieldTypes implements Bootable
     public const DEFAULT_FC_ROW_INCREMENT = 0.01;
 
     /**
-     * Array of custom field types to register.
-     *
-     * @var array
-     */
-    public $field_types = [];
-
-    /**
      * Cache of oEmbed responses.
      *
      * @var array
      */
     protected $oembed_response_cache = [];
-
-    /**
-     * Sets up the module object.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->field_types = [
-            // FieldTypes\FormField::class,
-            // FieldTypes\PostRelationshipField::class,
-            // FieldTypes\TermObjectField::class,
-            // FieldTypes\UniqueIdField::class,
-            // FieldTypes\VideoField::class,
-        ];
-    }
 
     /**
      * Boots the module and registers actions and filters.
@@ -56,8 +33,6 @@ class FieldTypes implements Bootable
      */
     public function boot(): void
     {
-        add_action('acf/include_field_types', [$this, 'include_field_types']);
-
         add_action('acf/init', [$this, 'disable_format_value_for_oembed'], 1);
 
         add_filter('acf/load_value/type=flexible_content',   [$this, 'load_value_for_flexible_content'], 10, 3);
@@ -101,33 +76,6 @@ class FieldTypes implements Bootable
             add_action('acf/render_field_settings/type=text',             [$this, 'render_field_settings_for_wp_post_excerpt']);
             add_action('acf/render_field_settings/type=textarea',         [$this, 'render_field_settings_for_wp_post_excerpt']);
             add_action('acf/render_field_settings/type=wysiwyg',          [$this, 'render_field_settings_for_wp_post_excerpt']);
-        }
-    }
-
-    /**
-     * Registers custom field types.
-     *
-     * @param  array $field_types One or more custom field types.
-     * @return void
-     */
-    public function register_field_types(array $field_types): void
-    {
-        foreach ($field_types as $field_type) {
-            acf_register_field_type($field_type);
-        }
-    }
-
-    /**
-     * Registers predefined custom field types.
-     *
-     * @listens ACF#action:acf/include_field_types
-     *
-     * @return void
-     */
-    public function include_field_types(): void
-    {
-        if (!empty($this->field_types)) {
-            $this->register_field_types($this->field_types);
         }
     }
 
