@@ -35,8 +35,12 @@ class FieldTypes implements Bootable
     {
         add_action('acf/init', [$this, 'disable_format_value_for_oembed'], 1);
 
+        add_filter('acf/pre_load_value/type=text',           [$this, 'pre_load_value_for_wp_post_content'], 10, 3);
+        add_filter('acf/pre_load_value/type=textarea',       [$this, 'pre_load_value_for_wp_post_content'], 10, 3);
+        add_filter('acf/pre_load_value/type=wysiwyg',        [$this, 'pre_load_value_for_wp_post_content'], 10, 3);
+        add_filter('acf/pre_load_value/type=image',          [$this, 'pre_load_value_for_wp_post_thumbnail'], 10, 3);
+
         add_filter('acf/load_value/type=flexible_content',   [$this, 'load_value_for_flexible_content'], 10, 3);
-        add_filter('acf/load_value/type=image',              [$this, 'load_value_for_wp_post_thumbnail'], 10, 3);
 
         add_filter('acf/format_value/type=clone',            [$this, 'format_value_for_sub_fields'], 20, 3);
         add_filter('acf/format_value/type=flexible_content', [$this, 'format_value_for_sub_fields'], 20, 3);
@@ -52,13 +56,14 @@ class FieldTypes implements Bootable
 
         add_filter('acf/format_value/type=oembed',           [$this, 'format_value_for_oembed'], 10, 3);
         add_filter('acf/validate_value/type=text',           [$this, 'validate_value_for_constraint_pattern'], 10, 3);
+
+        add_filter('acf/pre_update_value/type=text',         [$this, 'pre_update_value_for_wp_post_content'], 10, 4);
+        add_filter('acf/pre_update_value/type=textarea',     [$this, 'pre_update_value_for_wp_post_content'], 10, 4);
+        add_filter('acf/pre_update_value/type=wysiwyg',      [$this, 'pre_update_value_for_wp_post_content'], 10, 4);
         add_filter('acf/pre_update_value/type=image',        [$this, 'pre_update_value_for_wp_post_thumbnail'], 10, 4);
 
         add_filter('acf/update_value/type=flexible_content', [$this, 'update_value_for_flexible_content'], 10, 3);
         add_filter('acf/update_value/type=oembed',           [$this, 'update_value_for_oembed'], 10, 3);
-        add_filter('acf/update_value/type=text',             [$this, 'update_value_for_wp_post_excerpt'], 10, 3);
-        add_filter('acf/update_value/type=textarea',         [$this, 'update_value_for_wp_post_excerpt'], 10, 3);
-        add_filter('acf/update_value/type=wysiwyg',          [$this, 'update_value_for_wp_post_excerpt'], 10, 3);
 
         if (is_admin()) {
             add_action('acf/add_meta_boxes', [$this, 'filter_meta_boxes'], 10, 3);
@@ -69,13 +74,15 @@ class FieldTypes implements Bootable
 
             add_action('acf/render_field/type=select', [$this, 'render_field_for_select']);
 
-            add_action('acf/render_field_settings/type=flexible_content', [$this, 'render_field_settings_for_sorting_layouts']);
-            add_action('acf/render_field_settings/type=image',            [$this, 'render_field_settings_for_wp_post_thumbnail']);
-            add_action('acf/render_field_settings/type=select',           [$this, 'render_field_settings_for_custom_values']);
-            add_action('acf/render_field_settings/type=text',             [$this, 'render_field_settings_for_constraint_pattern']);
-            add_action('acf/render_field_settings/type=text',             [$this, 'render_field_settings_for_wp_post_excerpt']);
-            add_action('acf/render_field_settings/type=textarea',         [$this, 'render_field_settings_for_wp_post_excerpt']);
-            add_action('acf/render_field_settings/type=wysiwyg',          [$this, 'render_field_settings_for_wp_post_excerpt']);
+            add_action('acf/render_field_settings/type=text',     [$this, 'render_field_settings_for_wp_post_content']);
+            add_action('acf/render_field_settings/type=textarea', [$this, 'render_field_settings_for_wp_post_content']);
+            add_action('acf/render_field_settings/type=wysiwyg',  [$this, 'render_field_settings_for_wp_post_content']);
+            add_action('acf/render_field_settings/type=image',    [$this, 'render_field_settings_for_wp_post_thumbnail']);
+
+            add_action('acf/render_field_presentation_settings/type=flexible_content', [$this, 'render_field_settings_for_sorting_layouts']);
+
+            add_action('acf/render_field_validation_settings/type=select', [$this, 'render_field_settings_for_custom_values']);
+            add_action('acf/render_field_validation_settings/type=text',   [$this, 'render_field_settings_for_constraint_pattern']);
         }
     }
 
@@ -324,7 +331,7 @@ class FieldTypes implements Bootable
     /**
      * Add a custom "sort" setting into Flexible Content field settings.
      *
-     * @listens action:acf/render_field_settings/type=flexible_content
+     * @listens action:acf/render_field_presentation_settings/type=flexible_content
      *
      * @param  acf_field|array $field ACF Field.
      * @return void
@@ -347,18 +354,18 @@ class FieldTypes implements Bootable
     // =========================================================================
 
     /**
-     * Load the post thumbnail.
+     * If the field is a "post_thumbnail" proxy, load that value.
      *
-     * @listens filter:acf/load_value/type=image
+     * @listens filter:acf/pre_load_value/type=image
      *
      * @param  mixed      $value   The value of the field as found in the database.
      * @param  int|string $post_id The post ID which the value was loaded from.
      * @param  array      $field   The field structure.
      * @return mixed The mutated $value.
      */
-    public function load_value_for_wp_post_thumbnail($value, $post_id, array $field)
+    public function pre_load_value_for_wp_post_thumbnail( $value, $post_id, array $field )
     {
-        if (!empty($field['save_post_thumbnail'])) {
+        if ('image' === $field['type'] && !empty($field['save_post_thumbnail'])) {
             return get_post_thumbnail_id($post_id);
         }
 
@@ -366,10 +373,10 @@ class FieldTypes implements Bootable
     }
 
     /**
-     * If the field is a "post_thumbnail", set the selected image as the post thumbnail
+     * If the field is a "post_thumbnail" proxy, set the selected image as the post thumbnail
      * then short-circuit the update_value logic.
      *
-     * @listens filter:acf/pre_update_value
+     * @listens filter:acf/pre_update_value/type=image
      *
      * @param  ?bool      $check   The value to return instead of updating. Default NULL.
      * @param  mixed      $value   The value of the field as found in the $_POST array.
@@ -379,31 +386,12 @@ class FieldTypes implements Bootable
      */
     public function pre_update_value_for_wp_post_thumbnail($check, $value, $post_id, array $field)
     {
-        if ($field['type'] === 'image' && !empty($field['save_post_thumbnail'])) {
+        if ('image' === $field['type'] && !empty($field['save_post_thumbnail'])) {
             update_post_meta($post_id, '_thumbnail_id', $value);
             return true;
         }
 
         return $check;
-    }
-
-    /**
-     * Sets the selected image as the post thumbnail.
-     *
-     * @listens filter:acf/update_value/type=image
-     *
-     * @param  mixed      $value   The value of the field as found in the $_POST array.
-     * @param  int|string $post_id The post ID to save against.
-     * @param  array      $field   The field structure.
-     * @return mixed
-     */
-    public function update_value_for_wp_post_thumbnail($value, $post_id, array $field)
-    {
-        if (!empty($field['save_post_thumbnail'])) {
-            update_post_meta($post_id, '_thumbnail_id', $value);
-        }
-
-        return $value;
     }
 
     /**
@@ -414,7 +402,7 @@ class FieldTypes implements Bootable
      * @param  acf_field|array $field ACF Field.
      * @return void
      */
-    public function render_field_settings_for_wp_post_thumbnail(array $field): void
+    public function render_field_settings_for_wp_post_thumbnail(array $field) : void
     {
         // save_post_thumbnail
         acf_render_field_setting($field, [
@@ -613,7 +601,7 @@ class FieldTypes implements Bootable
     /**
      * Add a custom "tags" setting into Select field settings.
      *
-     * @listens action:acf/render_field_settings/type=select
+     * @listens action:acf/render_field_validation_settings/type=select
      *
      * @param  acf_field|array $field ACF Field.
      * @return void
@@ -636,28 +624,98 @@ class FieldTypes implements Bootable
     // =========================================================================
 
     /**
-     * Sets the value as the post excerpt.
+     * If the field is a "post_content" or "post_excerpt" proxy, load that value.
      *
-     * @listens filter:acf/update_value/type=text
-     * @listens filter:acf/update_value/type=textarea
-     * @listens filter:acf/update_value/type=wysiwyg
-     *     Filter the $value before it is saved to the database.
+     * @listens filter:acf/pre_load_value/type=text
+     * @listens filter:acf/pre_load_value/type=textarea
+     * @listens filter:acf/pre_load_value/type=wysiwyg
      *
+     * @param  mixed      $value   The value of the field as found in the database.
+     * @param  int|string $post_id The post ID which the value was loaded from.
+     * @param  array      $field   The field structure.
+     * @return mixed The mutated $value.
+     */
+    public function pre_load_value_for_wp_post_content($value, $post_id, array $field)
+    {
+        if (!empty( $field['save_post_content'])) {
+            return get_post_field('post_content', $post_id);
+        }
+
+        if (!empty( $field['save_post_excerpt'])) {
+            return get_post_field('post_excerpt', $post_id);
+        }
+
+        return $value;
+    }
+
+    /**
+     * If the field is a "post_content" or "post_excerpt" proxy, set the selected value
+     * as the post field then short-circuit the update_value logic.
+     *
+     * Sets the value as the post content or excerpt.
+     *
+     * @listens filter:acf/pre_update_value/type=text
+     * @listens filter:acf/pre_update_value/type=textarea
+     * @listens filter:acf/pre_update_value/type=wysiwyg
+     *
+     * @param  ?bool      $check   The value to return instead of updating. Default NULL.
      * @param  mixed      $value   The value of the field as found in the $_POST array.
      * @param  int|string $post_id The post ID to save against.
      * @param  array      $field   The field structure.
      * @return mixed
      */
-    public function update_value_for_wp_post_excerpt($value, $post_id, array $field)
+    public function pre_update_value_for_wp_post_content($check, $value, $post_id, array $field)
     {
-        if (!empty($value) && !empty($field['save_post_excerpt'])) {
-            wp_update_post([
-                'ID'           => $post_id,
-                'post_excerpt' => wp_strip_all_tags($value),
-            ]);
+        if (in_array($field['type'], ['text', 'textarea', 'wysiwyg'])) {
+            if (!empty($field['save_post_content'])) {
+                wp_update_post([
+                    'ID'           => $post_id,
+                    'post_content' => $value,
+                ]);
+                return true;
+            }
+
+            if (!empty($field['save_post_excerpt'])) {
+                wp_update_post([
+                    'ID'           => $post_id,
+                    'post_excerpt' => wp_strip_all_tags($value),
+                ]);
+                return true;
+            }
         }
 
-        return $value;
+        return $check;
+    }
+
+    /**
+     * Add a custom "post_content" or "post_excerpt" setting into text-based field settings.
+     *
+     * @listens action:acf/render_field_settings/type=text
+     * @listens action:acf/render_field_settings/type=textarea
+     * @listens action:acf/render_field_settings/type=wysiwyg
+     *
+     * @param  acf_field|array $field ACF Field.
+     * @return void
+     */
+    public function render_field_settings_for_wp_post_content(array $field) : void
+    {
+        // save_post_content
+        acf_render_field_setting($field, [
+            'label'         => __('Save as Content', 'acf'),
+            'instructions'  => __('Associate the text as the post content', 'acf'),
+            'name'          => 'save_post_content',
+            'type'          => 'true_false',
+            'ui'            => 1,
+        ]);
+
+        // save_post_excerpt
+        acf_render_field_setting($field, [
+            'label'         => __('Save as Excerpt', 'acf'),
+            'instructions'  => __('Associate the text as the post excerpt', 'acf'),
+            'name'          => 'save_post_excerpt',
+            'type'          => 'true_false',
+            'ui'            => 1,
+        ]);
     }
 
     /**
@@ -688,7 +746,7 @@ class FieldTypes implements Bootable
     /**
      * Add a custom "pattern" setting into Text field settings.
      *
-     * @listens action:acf/render_field_settings/type=text
+     * @listens action:acf/render_field_validation_settings/type=text
      *
      * @param  acf_field|array $field ACF Field.
      * @return void
@@ -704,27 +762,6 @@ class FieldTypes implements Bootable
         ]);
     }
 
-    /**
-     * Add a custom "post_excerpt" setting into Image field settings.
-     *
-     * @listens action:acf/render_field_settings/type=text
-     * @listens action:acf/render_field_settings/type=textarea
-     * @listens action:acf/render_field_settings/type=wysiwyg
-     *
-     * @param  acf_field|array $field ACF Field.
-     * @return void
-     */
-    public function render_field_settings_for_wp_post_excerpt(array $field): void
-    {
-        // save_post_excerpt
-        acf_render_field_setting($field, [
-            'label'         => __('Save as Excerpt', 'acf'),
-            'instructions'  => __('Associate the text as the post excerpt', 'acf'),
-            'name'          => 'save_post_excerpt',
-            'type'          => 'true_false',
-            'ui'            => 1,
-        ]);
-    }
 
 
 

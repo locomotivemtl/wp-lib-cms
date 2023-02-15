@@ -87,6 +87,9 @@ function acf_init(): void
     /** Register variation for custom filter ({@see pre_render_fields()}) */
     acf_add_filter_variations('acf/pre_render_field', ['type', 'name', 'key'], 0);
 
+    /** Register variation for existing filter ({@see \acf_get_value()}) */
+    acf_add_filter_variations('acf/pre_load_value', ['type', 'name', 'key'], 2);
+
     /** Register variation for existing filter ({@see \acf_update_value()}) */
     acf_add_filter_variations('acf/pre_update_value', ['type', 'name', 'key'], 3);
 }
