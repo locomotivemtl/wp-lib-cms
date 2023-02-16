@@ -311,8 +311,8 @@ class FieldTypes implements Bootable
         }
 
         uasort($value, function ($a, $b) {
-            $pA = $a['xyz_fc_position'];
-            $pB = $b['xyz_fc_position'];
+            $pA = $a['xyz_fc_position'] ?? 0;
+            $pB = $b['xyz_fc_position'] ?? 0;
 
             if ($pA == $pB) {
                 return 0;
