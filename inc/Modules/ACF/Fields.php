@@ -52,58 +52,7 @@ class Fields implements Bootable
     // =========================================================================
 
     /**
-     * Register fields and groups.
-     *
-     * @param  array $structs One or more local fields or groups.
-     * @return void
-     * @throws InvalidCustomFieldException
-     */
-    public function register_local_fields(array $structs): void
-    {
-        if (array_key_exists('key', $structs)) {
-            $structs = [ $structs ];
-        }
-
-        foreach ($structs as $i => $struct) {
-            $registered = $this->register_local_field($struct);
-
-            if (null === $registered && true === $this->strict_types) {
-                throw new InvalidCustomFieldException(sprintf(
-                    'Expected valid ACF field, group, or layout at offset [%s]',
-                    $i
-                ));
-            }
-        }
-    }
-
-    /**
-     * Register field or group.
-     *
-     * Layouts are acknowledged but ignored at this stage;
-     * they can only be processed if included by a field.
-     *
-     * @param  array $struct A local field or group.
-     * @return ?bool
-     */
-    protected function register_local_field(array $struct): ?bool
-    {
-        if (acf_is_field_group($struct) && acf_is_field_group_key($struct['key'])) {
-            return acf_add_local_field_group($struct);
-        }
-
-        if (acf_is_field($struct) && acf_is_field_key($struct['key'])) {
-            return acf_add_local_field($struct);
-        }
-
-        if (acf_is_field_layout($struct) && acf_is_field_layout_key($struct['key'])) {
-            return true;
-        }
-
-        return null;
-    }
-
-    /**
-     * Autoload ACF fields and groups from local PHP files.
+     * Autoload ACF groups, layouts, and fields from local PHP files.
      *
      * @listens ACF#action:acf/include_fields
      *
@@ -128,14 +77,19 @@ class Fields implements Bootable
     }
 
     /**
-     * Import ACF fields and groups from local PHP files.
+     * Register groups, layouts, and fields.
      *
-     * Notes about `include_once`:
-     * - Returns 1 on success, unless overridden by the included file.
-     * - Returns FALSE on failure and raises a warning.
-     * - Returns TRUE if the file was already included (regardless of success or failure).
-     *
-     * This method expects the included file will return an array.
+     * @param  array $structs One or more local fields or groups.
+     * @return void
+     * @throws InvalidCustomFieldException
+     */
+    public function register_local_fields(array $structs): void
+    {
+        $this->register_models($structs);
+    }
+
+    /**
+     * Import ACF groups, layouts, and fields from local PHP files.
      *
      * @param  string|string[] $paths One or more directory paths.
      * @return void
@@ -153,7 +107,7 @@ class Fields implements Bootable
                         continue;
                     }
 
-                    $contents = include_once $file_path;
+                    $contents = $this->include_file($file_path);
 
                     if (true === $contents) {
                         // Assume the file has been included previously.
@@ -188,37 +142,82 @@ class Fields implements Bootable
                         ) );
                     }
 
-                    $this->include_local_fields($contents, $file_path);
+                    $this->register_models($contents, $file_path);
                 }
             }
         }
     }
 
     /**
+     * Include local PHP file within isolated scope.
+     *
+     * @param  string $file_path The file path to include.
+     * @return mixed
+     */
+    protected function include_file(string $file_path)
+    {
+        return include_once $file_path;
+    }
+
+    /**
      * Registers fields and groups from imported local model structure(s).
      *
-     * @param  array $structs   One or more local model structure(s).
-     * @param  array $file_path The file path containing the model structure(s).
+     * @param  array   $structs   One or more local model structure(s).
+     * @param  ?string $file_path The file path containing the model structure(s).
      * @return void
      * @throws InvalidCustomFieldException
      */
-    protected function include_local_fields(array $structs, string $file_path): void
+    protected function register_models(array $structs, ?string $file_path = null): void
     {
         if (array_key_exists('key', $structs)) {
             $structs = [ $structs ];
         }
 
         foreach ($structs as $i => $struct) {
-            $registered = $this->register_local_field($struct);
+            $registered = $this->register_model($struct);
 
             if (null === $registered && true === $this->strict_types) {
-                throw new InvalidCustomFieldException(sprintf(
-                    'Expected valid ACF model at offset [%s] in file [%s]',
-                    $i,
-                    ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/')
-                ));
+                if ($file_path) {
+                    $message = sprintf(
+                        'Expected valid ACF field, group, or layout at offset [%s] in file [%s]',
+                        $i,
+                        ltrim(str_replace(WP_CONTENT_DIR, '', $file_path), '/')
+                    );
+                } else {
+                    $message = sprintf(
+                        'Expected valid ACF field, group, or layout at offset [%s]',
+                        $i
+                    );
+                }
+                throw new InvalidCustomFieldException($message);
             }
         }
+    }
+
+    /**
+     * Register group, layout, and field.
+     *
+     * Layouts are acknowledged but ignored at this stage;
+     * they can only be processed if included by a field.
+     *
+     * @param  array $struct A local field or group.
+     * @return ?bool
+     */
+    protected function register_model(array $struct): ?bool
+    {
+        if (acf_is_field_group($struct) && acf_is_field_group_key($struct['key'])) {
+            return acf_add_local_field_group($struct);
+        }
+
+        if (acf_is_field($struct) && acf_is_field_key($struct['key'])) {
+            return acf_add_local_field($struct);
+        }
+
+        if (acf_is_field_layout($struct) && acf_is_field_layout_key($struct['key'])) {
+            return true;
+        }
+
+        return null;
     }
 
 
