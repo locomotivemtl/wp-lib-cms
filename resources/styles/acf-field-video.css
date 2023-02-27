@@ -1,0 +1,49 @@
+/**
+ * Advanced Custom Fields: Video Field Type
+ *
+ * This field type is based on the official Image field type.
+ */
+
+.acf-video-uploader {
+    position: relative;
+}
+
+.acf-video-uploader:after {
+    display: block;
+    clear: both;
+    content: "";
+}
+
+.acf-video-uploader p {
+    margin: 0;
+}
+
+.acf-video-uploader .video-wrap {
+    position: relative;
+    float: left;
+}
+
+.acf-video-uploader .video-wrap video {
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    display: block;
+    min-width: 30px;
+    min-height: 30px;
+    background: #F1F1F1;
+    margin: 0;
+    padding: 0;
+}
+
+.acf-video-uploader .video-wrap:hover .acf-actions {
+    display: block;
+}
+
+.acf-video-uploader input.button {
+    width: auto;
+}
+
+html[dir="rtl"] .acf-video-uploader .video-wrap {
+    float: right;
+}
