@@ -4,62 +4,116 @@ namespace App\Cms\Support;
 
 use App\Cms\Exceptions\InvalidArgumentException;
 
+use function WeCodeMore\packageAssetsBasePath;
+use function WeCodeMore\packageAssetUrl;
+
+use const App\Cms\PACKAGE_NAME;
+use const App\Cms\PACKAGE_PATH;
 use const App\Cms\PLUGIN_PATH;
 use const App\Cms\PLUGIN_URL;
 
 /**
- * Retrieves the directory URI of the framework.
+ * Retrieves the directory URI of the plugin or package.
  *
  * If a file is passed in, it'll be appended to the end of the URI.
  *
- * @param  string $file Optional. File to search for in the framework directory.
- * @return string The URI of the file or framework directory.
+ * @param  non-empty-string|null $path Path to search for.
+ * @return non-empty-string The URI of the file in the plugin or package.
+ *     If $path is NULL, the plugin URI is returned.
  */
-function uri(string $file = ''): string
+function uri(string $path = null): string
 {
-    $file = ltrim($file, '/');
-    if ($file) {
-        return rtrim(PLUGIN_URL, '/') . '/' . $file;
+    if (is_null($path)) {
+        return PLUGIN_URL;
     }
 
-    return PLUGIN_URL;
+    $path = ltrim(wp_normalize_path($path), '/');
+    if (!$path) {
+        throw new InvalidArgumentException(
+            'Expected $path to be a non empty string'
+        );
+    }
+
+    $plugin = wp_normalize_path(PLUGIN_PATH);
+    if (is_readable(rtrim($plugin, '/') . '/' . $path)) {
+        return rtrim(PLUGIN_URL, '/') . '/' . $path;
+    }
+
+    $package = wp_normalize_path(PACKAGE_PATH);
+    if (is_readable(rtrim($package, '/') . '/' . $path)) {
+        return packageAssetUrl(PACKAGE_NAME, $path);
+    }
+
+    throw new InvalidArgumentException(sprintf(
+        'Expected $path to exist in plugin or package: %s',
+        $path
+    ));
 }
 
 /**
- * Retrieves the directory path of the framework.
+ * Retrieves the directory path of the plugin or package.
  *
  * If a file is passed in, it'll be appended to the end of the path.
  *
- * @param  string $file Optional. File to search for in the framework directory.
- * @return string The path of the file or framework directory.
+ * @param  non-empty-string|null $path Path to search for.
+ * @return non-empty-string The absolute path of the file in the plugin or package.
+ *     If $path is NULL, the plugin directory path is returned.
  */
-function path(string $file = ''): string
+function path(string $path = null): string
 {
-    $file = ltrim($file, '/');
-    if ($file) {
-        return rtrim(PLUGIN_PATH, '/') . '/' . $file;
+    if (is_null($path)) {
+        return PLUGIN_PATH;
     }
 
-    return PLUGIN_PATH;
+    $path = ltrim(wp_normalize_path($path), '/');
+    if (!$path) {
+        throw new InvalidArgumentException(
+            'Expected $path to be a non empty string'
+        );
+    }
+
+    $plugin = wp_normalize_path(PLUGIN_PATH);
+    if (is_readable($_path = rtrim($plugin, '/') . '/' . $path)) {
+        return $_path;
+    }
+
+    $package = wp_normalize_path(PACKAGE_PATH);
+    if (is_readable($_path = rtrim($package, '/') . '/' . $path)) {
+        return $_path;
+    }
+
+    throw new InvalidArgumentException(sprintf(
+        'Expected $path to exist in plugin or package: %s',
+        $path
+    ));
 }
 
 /**
- * Outputs a view template.
+ * Outputs a view template from the plugin or package.
  *
- * @param  string $path File to search for in the framework directory.
- * @param  array  $data The variables to be passed through to the view.
+ * @param  non-empty-string     $path File to search for.
+ * @param  array<string, mixed> $data The variables to be passed through to the view.
  * @return void
  */
 function view(string $path, array $data = []): void
 {
-    if ('.php' !== substr($path, -4)) {
-        $path = path("resources/views/{$path}.php");
+    if ('.php' === substr($path, -4)) {
+        if (!is_readable($path)) {
+            return;
+        }
+    } else {
+        try {
+            $path = path("resources/views/{$path}.php");
+        } catch (InvalidArgumentException $e) {
+            return;
+        }
     }
 
-    if (file_exists($path)) {
+    if ($data) {
         extract($data, EXTR_SKIP);
-        include $path;
     }
+
+    include $path;
 }
 
 /**
@@ -81,7 +135,12 @@ function load_textdomain(string $domain = null): bool
     $locale = determine_locale();
     $locale = apply_filters('plugin_locale', $locale, $domain);
     $mofile = $locale . '.mo';
-    $mopath = path('resources/languages/' . $mofile);
+
+    try {
+        $mopath = path('resources/languages/' . $mofile);
+    } catch (InvalidArgumentException $e) {
+        return false;
+    }
 
     return \load_textdomain($domain, $mopath);
 }

@@ -1,5 +1,5 @@
 {
-    "type": "library",
+    "type": "wordpress-library",
     "name": "locomotivemtl/wp-lib-cms",
     "description": "Locomotive's WordPress CMS Library",
     "license": "MIT",
@@ -15,8 +15,9 @@
         "php": ">=7.4",
         "composer/installers": "^1.0 || ^2.0",
         "johnbillion/extended-cpts": "^5.0",
-        "mcaskill/wp-ecocide": "dev-main",
         "mcaskill/php-array-insert": "^1.0",
+        "mcaskill/wp-ecocide": "dev-main",
+        "wecodemore/wp-package-assets-publisher": "^1.1",
         "wpackagist-plugin/acf-extended": "^0.8",
         "wpackagist-plugin/advanced-custom-fields": "^6.0"
     },
@@ -34,7 +35,8 @@
     },
     "config": {
         "allow-plugins": {
-            "composer/installers": true
+            "composer/installers": true,
+            "wecodemore/wp-package-assets-publisher": true
         },
         "preferred-install": "dist",
         "sort-packages": true
@@ -43,7 +45,10 @@
         "branch-alias": {
             "dev-main": "1.x-dev"
         },
-        "installer-disable": true
+        "installer-disable": true,
+        "package-assets": [
+            "./resources"
+        ]
     },
     "repositories": [
         {

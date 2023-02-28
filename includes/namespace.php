@@ -14,6 +14,9 @@ use WP_Taxonomy;
  */
 function bootstrap(array $modules = []): void
 {
+    define( __NAMESPACE__ . '\PACKAGE_NAME', 'locomotivemtl/wp-lib-cms' );
+    define( __NAMESPACE__ . '\PACKAGE_PATH', dirname(__DIR__) );
+
     register_initial_hooks();
 
     provide_extra_hooks();
