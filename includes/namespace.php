@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms;
+namespace Locomotive\Cms;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 use WP_Post_Type;
 use WP_Taxonomy;
 
@@ -43,8 +43,8 @@ function bootstrap(array $modules = []): void
  */
 function register_initial_hooks(): void
 {
-    add_action('plugins_loaded', 'App\\Cms\\Support\\load_textdomain');
-    add_filter('sanitize_title', 'App\\Cms\\Support\\sanitize_zero_chars');
+    add_action('plugins_loaded', 'Locomotive\\Cms\\Support\\load_textdomain');
+    add_filter('sanitize_title', 'Locomotive\\Cms\\Support\\sanitize_zero_chars');
 }
 
 /**

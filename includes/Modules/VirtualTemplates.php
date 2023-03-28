@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Modules;
+namespace Locomotive\Cms\Modules;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 use InvalidArgumentException;
 use WP_Post;
 
@@ -31,11 +31,11 @@ class VirtualTemplates implements Bootable
      */
     public function boot(): void
     {
-        add_action('xyz/virtual-templates/resolution/key=redirection-child',  [$this, 'template_redirect_to_child'], 10, 1);
-        add_action('xyz/virtual-templates/resolution/key=redirection-parent', [$this, 'template_redirect_to_parent'], 10, 1);
+        add_action('locomotive/virtual-templates/resolution/key=redirection-child',  [$this, 'template_redirect_to_child'], 10, 1);
+        add_action('locomotive/virtual-templates/resolution/key=redirection-parent', [$this, 'template_redirect_to_parent'], 10, 1);
 
-        add_filter('xyz/virtual-templates/post_states/key=redirection-child',  [$this, 'display_post_state_redirection'], 10, 1);
-        add_filter('xyz/virtual-templates/post_states/key=redirection-parent', [$this, 'display_post_state_redirection'], 10, 1);
+        add_filter('locomotive/virtual-templates/post_states/key=redirection-child',  [$this, 'display_post_state_redirection'], 10, 1);
+        add_filter('locomotive/virtual-templates/post_states/key=redirection-parent', [$this, 'display_post_state_redirection'], 10, 1);
 
         add_action('template_redirect', [$this, 'template_redirect'], 1);
         add_filter('theme_templates', [$this, 'theme_templates'], 10, 4);
@@ -71,23 +71,23 @@ class VirtualTemplates implements Bootable
              * The dynamic portion of the hook name, `$post_template`,
              * refers to the post's template.
              *
-             * @event filter:xyz/virtual-templates/post_states/key={$post_template}
+             * @event filter:locomotive/virtual-templates/post_states/key={$post_template}
              *
              * @param array<string, string> $post_states An array of post display states.
              * @param WP_Post               $post        The current post object.
              */
-            $post_states = apply_filters("xyz/virtual-templates/post_states/key={$post_template}", $post_states, $post);
+            $post_states = apply_filters("locomotive/virtual-templates/post_states/key={$post_template}", $post_states, $post);
 
             /**
              * Filters the post display states based on the special template.
              *
-             * @event filter:xyz/virtual-templates/post_states
+             * @event filter:locomotive/virtual-templates/post_states
              *
              * @param array<string, string> $post_states   An array of post display states.
              * @param string                $post_template The page template.
              * @param WP_Post               $post          The current post object.
              */
-            $post_states = apply_filters('xyz/virtual-templates/post_states', $post_states, $post_template, $post);
+            $post_states = apply_filters('locomotive/virtual-templates/post_states', $post_states, $post_template, $post);
         }
 
         return $post_states;
@@ -96,7 +96,7 @@ class VirtualTemplates implements Bootable
     /**
      * Returns the theme's post templates for a given post type.
      *
-     * @fires filter:xyz/virtual-templates/virtual-templates
+     * @fires filter:locomotive/virtual-templates/virtual-templates
      *
      * @param WP_Post|null $post      Optional. The post being edited, provided for context.
      * @param string       $post_type Optional. Post type to get the templates for. Default 'page'.
@@ -118,13 +118,13 @@ class VirtualTemplates implements Bootable
         /**
          * Filters list of special page templates.
          *
-         * @event filter:xyz/virtual-templates/virtual-templates
+         * @event filter:locomotive/virtual-templates/virtual-templates
          *
          * @param string[]     $post_templates Array of special page templates. Keys are filenames, values are translated names.
          * @param WP_Post|null $post           The post being edited, provided for context, or null.
          * @param string       $post_type      Post type to get the templates for.
          */
-        $post_templates = apply_filters('xyz/virtual-templates/templates', $post_templates, $post, $post_type);
+        $post_templates = apply_filters('locomotive/virtual-templates/templates', $post_templates, $post, $post_type);
 
         return $post_templates;
     }
@@ -161,8 +161,8 @@ class VirtualTemplates implements Bootable
      *
      * @listens WP#action:template_redirect
      *
-     * @fires action:xyz/virtual-templates/resolution/key={$post_template}
-     * @fires action:xyz/virtual-templates/resolution
+     * @fires action:locomotive/virtual-templates/resolution/key={$post_template}
+     * @fires action:locomotive/virtual-templates/resolution
      *
      * @global WP_Post $post
      *
@@ -191,29 +191,29 @@ class VirtualTemplates implements Bootable
              * The dynamic portion of the hook name, `$post_template`,
              * refers to the post's template.
              *
-             * @event action:xyz/virtual-templates/resolution/key={$post_template}
+             * @event action:locomotive/virtual-templates/resolution/key={$post_template}
              *
              * @param WP_Post $post The post related to the template.
              */
-            do_action("xyz/virtual-templates/resolution/key={$post_template}", $post);
+            do_action("locomotive/virtual-templates/resolution/key={$post_template}", $post);
 
             /**
              * Fires the template's resolution process.
              *
-             * @event action:xyz/virtual-templates/resolution
+             * @event action:locomotive/virtual-templates/resolution
              *
              * @param string  $post_template The page template.
              * @param WP_Post $post          The post related to the template.
              */
-            do_action('xyz/virtual-templates/resolution', $post_template, $post);
+            do_action('locomotive/virtual-templates/resolution', $post_template, $post);
         }
     }
 
     /**
      * Redirect to the first child post.
      *
-     * @listens action:xyz/virtual-templates/post_states/key=redirection-child
-     * @listens action:xyz/virtual-templates/post_states/key=redirection-parent
+     * @listens action:locomotive/virtual-templates/post_states/key=redirection-child
+     * @listens action:locomotive/virtual-templates/post_states/key=redirection-parent
      *
      * @param  array<string, string> $post_states An array of post display states.
      * @return array<string, string>
@@ -228,7 +228,7 @@ class VirtualTemplates implements Bootable
     /**
      * Redirect to the first child post.
      *
-     * @listens action:xyz/virtual-templates/resolution/key=redirection-child
+     * @listens action:locomotive/virtual-templates/resolution/key=redirection-child
      *
      * @param  WP_Post $post The page associated to the template.
      * @return void
@@ -259,7 +259,7 @@ class VirtualTemplates implements Bootable
     /**
      * Redirect to the closest parent post.
      *
-     * @listens action:xyz/virtual-templates/resolution/key=redirection-parent
+     * @listens action:locomotive/virtual-templates/resolution/key=redirection-parent
      *
      * @param  WP_Post $post The page associated to the template.
      * @return void

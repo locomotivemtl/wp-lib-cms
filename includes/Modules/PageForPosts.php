@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Cms\Modules;
+namespace Locomotive\Cms\Modules;
 
-use App\Cms\Contracts\Bootable;
-use App\Cms\Contracts\Models\Model;
-use App\Cms\Models\PostTypes\Page;
+use Locomotive\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Models\Model;
+use Locomotive\Cms\Models\PostTypes\Page;
 use InvalidArgumentException;
 use WP_Post;
 use WP_Post_Type;
 use WP_Query;
 
-use function App\Cms\Support\is_frontend_doing_ajax;
+use function Locomotive\Cms\Support\is_frontend_doing_ajax;
 
 /**
  * Module: Page for Posts
@@ -41,7 +41,7 @@ class PageForPosts implements Bootable
      *
      * @var string
      */
-    const OPTION_NAME = 'app/cms_page_for_posts';
+    const OPTION_NAME = 'app_page_for_posts';
 
     /**
      * The settings section name.
@@ -110,9 +110,9 @@ class PageForPosts implements Bootable
         add_filter('post_type_archive_link',  [$this, 'post_type_archive_link'], 10, 2);
 
         /**
-         * App Modules Compatibility
+         * Module Compatibility
          */
-        add_filter('xyz/model/get_rewrite_slugs', [$this, 'filter_model_rewrite_slugs'], 10, 2);
+        add_filter('locomotive/model/get_rewrite_slugs', [$this, 'filter_model_rewrite_slugs'], 10, 2);
 
         /**
          * Advanced Custom Fields Compatibility
@@ -136,7 +136,7 @@ class PageForPosts implements Bootable
      */
     public function acf_location_page_type_rule_values(array $values = []): array
     {
-        $values['post_type_archive'] = __('All post type archives', 'app/cms');
+        $values['post_type_archive'] = __('All post type archives', 'locomotive');
 
         $archives = static::get_pages_for_posts();
 
@@ -210,7 +210,7 @@ class PageForPosts implements Bootable
     /**
      * Filters the array of rewrite slugs for the given post type or taxonomy.
      *
-     * @listens filter:xyz/model/get_rewrite_slugs
+     * @listens filter:locomotive/model/get_rewrite_slugs
      *
      * @param  string[] $slugs An array of permastruct slugs.
      * @param  Model    $model The post type or taxonomy model.
@@ -289,7 +289,7 @@ class PageForPosts implements Bootable
                 $post_type_object = get_post_type_object($post_type);
 
                 $notice = sprintf(
-                    __('You are currently editing the page that shows your latest %s.', 'app/cms'),
+                    __('You are currently editing the page that shows your latest %s.', 'locomotive'),
                     strtolower($post_type_object->labels->name)
                 );
 
@@ -478,7 +478,7 @@ class PageForPosts implements Bootable
             }
 
             if ($front_page === $post_id) {
-                wp_die(__('You cannot delete the front page.', 'app/cms'), 403);
+                wp_die(__('You cannot delete the front page.', 'locomotive'), 403);
             }
         }
 
@@ -491,7 +491,7 @@ class PageForPosts implements Bootable
         $post_type_object = get_post_type_object($post_type);
 
         $message = sprintf(
-            __('You cannot delete the page while it is assigned to show your latest %s.', 'app/cms'),
+            __('You cannot delete the page while it is assigned to show your latest %s.', 'locomotive'),
             strtolower($post_type_object->labels->name)
         );
 
@@ -607,14 +607,14 @@ class PageForPosts implements Bootable
     {
         if (!isset($labels->page_for_posts)) {
             $labels->page_for_posts = sprintf(
-                _x('%s Page', 'Page for post type', 'app/cms'),
+                _x('%s Page', 'Page for post type', 'locomotive'),
                 $labels->name
             );
         }
 
         if (!isset($labels->page_for_posts_field)) {
             $labels->page_for_posts_field = sprintf(
-                _x('%1$s page: %2$s', '1. Post type; 2. "%s"', 'app/cms'),
+                _x('%1$s page: %2$s', '1. Post type; 2. "%s"', 'locomotive'),
                 $labels->name,
                 '%s'
             );
@@ -680,7 +680,7 @@ class PageForPosts implements Bootable
             return $post_type->labels->page_for_posts_field;
         } else {
             return sprintf(
-                _x('%1$s: %2$s', 'Used to explain or start an enumeration', 'app/cms'),
+                _x('%1$s: %2$s', 'Used to explain or start an enumeration', 'locomotive'),
                 $post_type->label,
                 '%s'
             );
@@ -709,14 +709,14 @@ class PageForPosts implements Bootable
 
             add_settings_section(
                 $this->settings_section,
-                sprintf(_x('%s Options', 'page for posts', 'app/cms'), get_bloginfo('name')),
+                sprintf(_x('%s Options', 'page for posts', 'locomotive'), get_bloginfo('name')),
                 '',
                 'reading'
             );
 
             add_settings_field(
                 static::OPTION_NAME,
-                __('Pages to use as archives', 'app/cms'),
+                __('Pages to use as archives', 'locomotive'),
                 [$this, 'render_archive_settings_field'],
                 'reading',
                 $this->settings_section,
@@ -756,7 +756,7 @@ class PageForPosts implements Bootable
         foreach ($value as $post_type => &$page_ID) {
             /** @todo Document the filter */
             $page_ID = apply_filters(
-                "xyz/page-for-posts/{$post_type}/input",
+                "locomotive/page-for-posts/{$post_type}/input",
                 absint($page_ID)
             );
         }
@@ -783,7 +783,7 @@ class PageForPosts implements Bootable
 
         echo '<fieldset>' .
             '<legend class="screen-reader-text"><span>' .
-            __('Pages to use as archives', 'app/cms') .
+            __('Pages to use as archives', 'locomotive') .
             '</span></legend>';
 
         foreach ($args['post_types'] as $post_type_obj) {
@@ -793,7 +793,7 @@ class PageForPosts implements Bootable
 
             /** @todo Document the filter */
             $value = apply_filters(
-                "xyz/page-for-posts/{$post_type}/output",
+                "locomotive/page-for-posts/{$post_type}/output",
                 (isset($archives[$post_type]) ? $archives[$post_type] : null)
             );
 

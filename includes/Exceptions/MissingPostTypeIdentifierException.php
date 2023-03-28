@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Exceptions;
+namespace Locomotive\Cms\Exceptions;
 
-use App\Cms\Contracts\Exceptions\Exception;
+use Locomotive\Cms\Contracts\Exceptions\Exception;
 
 /**
  * The identifier of a post type was expected.

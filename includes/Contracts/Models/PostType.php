@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Contracts\Models;
+namespace Locomotive\Cms\Contracts\Models;
 
 /**
  * Post Type Model interface

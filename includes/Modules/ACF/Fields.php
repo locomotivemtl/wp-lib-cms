@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Cms\Modules\ACF;
+namespace Locomotive\Cms\Modules\ACF;
 
-use App\Cms\Contracts\Bootable;
-use App\Cms\Exceptions\InvalidCustomFieldException;
+use Locomotive\Cms\Contracts\Bootable;
+use Locomotive\Cms\Exceptions\InvalidCustomFieldException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-use function App\Cms\Modules\ACF\acf_is_field_layout;
-use function App\Cms\Modules\ACF\acf_is_field_layout_key;
+use function Locomotive\Cms\Modules\ACF\acf_is_field_layout;
+use function Locomotive\Cms\Modules\ACF\acf_is_field_layout_key;
 
 use const WP_CONTENT_DIR;
 
@@ -64,12 +64,12 @@ class Fields implements Bootable
         /**
          * Filters the list of paths that are searched for local ACF PHP fields.
          *
-         * @fires filter:xyz/acf/settings/load_php
+         * @fires filter:locomotive/acf/settings/load_php
          *
          * @param  string[] $paths The paths of local ACF fields.
          * @return string[]
          */
-        $paths = apply_filters('xyz/acf/settings/load_php', []);
+        $paths = apply_filters('locomotive/acf/settings/load_php', []);
 
         if (!empty($paths)) {
             $this->import_local_fields($paths);

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Modules\ACF;
+namespace Locomotive\Cms\Modules\ACF;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 
 /**
  * ACF Module: Field Relationships

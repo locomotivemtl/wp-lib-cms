@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Modules\ACF\FieldTypes;
+namespace Locomotive\Cms\Modules\ACF\FieldTypes;
 
 use acf_field;
 

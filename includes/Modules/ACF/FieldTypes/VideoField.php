@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Cms\Modules\ACF\FieldTypes;
+namespace Locomotive\Cms\Modules\ACF\FieldTypes;
 
 use acf_field_image;
 
-use function App\Cms\Support\path;
-use function App\Cms\Support\uri;
+use function Locomotive\Cms\Support\path;
+use function Locomotive\Cms\Support\uri;
 
 /**
  * Video Field

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Modules\Polylang;
+namespace Locomotive\Cms\Modules\Polylang;
 
 use PLL_Cache;
 use PLL_Language;
@@ -10,7 +10,7 @@ use WP_Post;
 
 use const OBJECT;
 
-use App\Cms\Modules\PageForPosts;
+use Locomotive\Cms\Modules\PageForPosts;
 
 /**
  * Bootstraps the module.

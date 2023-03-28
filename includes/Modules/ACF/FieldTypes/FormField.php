@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Cms\Modules\ACF\FieldTypes;
+namespace Locomotive\Cms\Modules\ACF\FieldTypes;
 
 use acf_field;
 use GFAPI;
 use WPCF7_ContactForm;
 
-use function App\Cms\Support\path;
-use function App\Cms\Support\uri;
+use function Locomotive\Cms\Support\path;
+use function Locomotive\Cms\Support\uri;
 use function Ninja_Forms;
 
 /**
@@ -339,7 +339,7 @@ class FormField extends acf_field
     }
 
     /**
-     * This filter is appied to the $value after it is loaded
+     * This filter is applied to the $value after it is loaded
      * from the DB and before it is returned to the template.
      *
      * @param  mixed $value   The value which was loaded from the database.

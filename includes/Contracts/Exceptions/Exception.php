@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Contracts\Exceptions;
+namespace Locomotive\Cms\Contracts\Exceptions;
 
 interface Exception extends \Throwable
 {

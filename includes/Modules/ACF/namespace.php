@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Cms\Modules\ACF;
+namespace Locomotive\Cms\Modules\ACF;
 
 use WP_Taxonomy;
 use WP_Term;
 
-use function App\Cms\Modules\Polylang\pll_preferred_language;
-use function App\Cms\Support\path;
+use function Locomotive\Cms\Modules\Polylang\pll_preferred_language;
+use function Locomotive\Cms\Support\path;
 
 /**
  * Bootstraps the module.
@@ -356,7 +356,7 @@ function create_field_author(string $key, array $prefs = null): array
     $field = [
         'key'           => "field_{$key}_author_object",
         'name'          => 'author',
-        'label'         => __('Choose an author', 'app/cms'),
+        'label'         => __('Choose an author', 'locomotive'),
         'placeholder'   => __('None'),
         'type'          => 'select',
         'required'      => 0,
@@ -387,21 +387,21 @@ function create_fields_person(string $key, array $prefs = null): array
         'name' => [
             'key'                 => "field_{$key}_name",
             'name'                => 'name',
-            'label'               => __('Name', 'app/cms'),
+            'label'               => __('Name', 'locomotive'),
             'type'                => 'text',
             'required'            => 0,
         ],
         'role' => [
             'key'                 => "field_{$key}_role",
             'name'                => 'role',
-            'label'               => __('Role', 'app/cms'),
+            'label'               => __('Role', 'locomotive'),
             'type'                => 'text',
             'required'            => 0,
         ],
         'biography' => [
             'key'                 => "field_{$key}_biography",
             'name'                => 'biography',
-            'label'               => __('Biography', 'app/cms'),
+            'label'               => __('Biography', 'locomotive'),
             'type'                => 'textarea',
             'required'            => 0,
             'rows'                => 3,
@@ -410,15 +410,15 @@ function create_fields_person(string $key, array $prefs = null): array
         'link' => [
             'key'                 => "field_{$key}_link",
             'name'                => 'link',
-            'label'               => __('Link', 'app/cms'),
+            'label'               => __('Link', 'locomotive'),
             'type'                => 'link',
             'return_format'       => 'array',
         ],
         'image' => [
             'key'                 => "field_{$key}_image",
             'name'                => 'image',
-            'label'               => __('Image', 'app/cms'),
-            'label'               => __('Image', 'app/cms'),
+            'label'               => __('Image', 'locomotive'),
+            'label'               => __('Image', 'locomotive'),
             'type'                => 'image',
             'required'            => 0,
             'save_post_thumbnail' => 0,
@@ -469,7 +469,7 @@ function pll_language_defined(): void
 function pll_no_language_defined(): void
 {
     add_filter('acf/settings/default_language', 'pll_default_language');
-    add_filter('acf/settings/current_language', '\\App\\Cms\\Modules\\Polylang\\pll_preferred_language');
+    add_filter('acf/settings/current_language', '\\Locomotive\\Cms\\Modules\\Polylang\\pll_preferred_language');
 }
 
 /**

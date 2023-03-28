@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Models;
+namespace Locomotive\Cms\Models;
 
 use WP_Query;
 

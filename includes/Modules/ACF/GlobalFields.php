@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Modules\ACF;
+namespace Locomotive\Cms\Modules\ACF;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 
 /**
  * ACF Module: Global Fields
@@ -25,7 +25,7 @@ class GlobalFields implements Bootable
      *
      * @var string
      */
-    protected $acf_option_prefix = 'app/cms_acf_';
+    protected $acf_option_prefix = 'app_acf_';
 
     /**
      * Temporary store of option values to save.

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Cms\Support;
+namespace Locomotive\Cms\Support;
 
-use App\Cms\Exceptions\InvalidArgumentException;
+use Locomotive\Cms\Exceptions\InvalidArgumentException;
 
 use function WeCodeMore\packageAssetsBasePath;
 use function WeCodeMore\packageAssetUrl;
 
-use const App\Cms\PACKAGE_NAME;
-use const App\Cms\PACKAGE_PATH;
 use const App\Cms\PLUGIN_PATH;
 use const App\Cms\PLUGIN_URL;
+use const Locomotive\Cms\PACKAGE_NAME;
+use const Locomotive\Cms\PACKAGE_PATH;
 
 /**
  * Retrieves the directory URI of the plugin or package.
@@ -129,7 +129,7 @@ function view(string $path, array $data = []): void
 function load_textdomain(string $domain = null): bool
 {
     if (empty($domain)) {
-        $domain = 'app/cms';
+        $domain = 'locomotive';
     }
 
     $locale = determine_locale();
@@ -292,12 +292,12 @@ function minimum_image_size($width, $height = null, $ratio = null): string
 
     if ($ratio) {
         /* translators: 1: Width, 2: Height, 3: Ratio. */
-        $text = _x('Minimum image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
+        $text = _x('Minimum image size: %d×%d (%s).', 'image size: width x height + ratio', 'locomotive');
         return sprintf($text, $width, $height, $ratio);
     }
 
     /* translators: 1: Width, 2: Height. */
-    $text = _x('Minimum image size: %d×%d.', 'image size: width x height', 'app/cms');
+    $text = _x('Minimum image size: %d×%d.', 'image size: width x height', 'locomotive');
     return sprintf($text, $width, $height);
 }
 
@@ -319,12 +319,12 @@ function recommended_image_size($width, $height = null, $ratio = null): string
 
     if ($ratio) {
         /* translators: 1: Width, 2: Height, 3: Ratio. */
-        $text = _x('Recommended image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
+        $text = _x('Recommended image size: %d×%d (%s).', 'image size: width x height + ratio', 'locomotive');
         return sprintf($text, $width, $height, $ratio);
     }
 
     /* translators: 1: Width, 2: Height. */
-    $text = _x('Recommended image size: %d×%d.', 'image size: width x height', 'app/cms');
+    $text = _x('Recommended image size: %d×%d.', 'image size: width x height', 'locomotive');
     return sprintf($text, $width, $height);
 }
 
@@ -354,16 +354,16 @@ function recommended_svg_image($width = null, $height = null, $ratio = null): st
 
         if ($ratio) {
             /* translators: 1: Width, 2: Height, 3: Ratio. */
-            $text = _x('An SVG image is recommended or an image size: %d×%d (%s).', 'image size: width x height + ratio', 'app/cms');
+            $text = _x('An SVG image is recommended or an image size: %d×%d (%s).', 'image size: width x height + ratio', 'locomotive');
             return sprintf($text, $width, $height, $ratio);
         }
 
         /* translators: 1: Width, 2: Height. */
-        $text = _x('An SVG image is recommended or an image size: %d×%d.', 'image size: width x height', 'app/cms');
+        $text = _x('An SVG image is recommended or an image size: %d×%d.', 'image size: width x height', 'locomotive');
         return sprintf($text, $width, $height);
     }
 
-    return _x('An SVG image is recommended.', 'image size', 'app/cms');
+    return _x('An SVG image is recommended.', 'image size', 'locomotive');
 }
 
 /**
@@ -436,7 +436,7 @@ function is_wp_rest_request(): bool
      *
      * @param bool $is_wp_rest_request Whether the current request is a WordPress REST API request.
      */
-    return apply_filters('xyz/is_wp_rest_request', defined('REST_REQUEST') && REST_REQUEST);
+    return apply_filters('locomotive/is_wp_rest_request', defined('REST_REQUEST') && REST_REQUEST);
 }
 
 /**
@@ -455,7 +455,7 @@ function is_wp_cli_request(): bool
      *
      * @param bool $is_wp_cli_request Whether the current request is a WordPress CLI request.
      */
-    return apply_filters('xyz/is_wp_cli_request', defined('WP_CLI') && WP_CLI);
+    return apply_filters('locomotive/is_wp_cli_request', defined('WP_CLI') && WP_CLI);
 }
 
 /**
@@ -474,7 +474,7 @@ function is_wp_import_request(): bool
      *
      * @param bool $is_wp_import_request Whether the current request is a WordPress importer request.
      */
-    return apply_filters('xyz/is_wp_import_request', defined('WP_LOAD_IMPORTERS') && WP_LOAD_IMPORTERS);
+    return apply_filters('locomotive/is_wp_import_request', defined('WP_LOAD_IMPORTERS') && WP_LOAD_IMPORTERS);
 }
 
 /**
@@ -493,7 +493,7 @@ function is_wp_xmlrpc_request(): bool
      *
      * @param bool $is_wp_xmlrpc_request Whether the current request is a WordPress XML-RPC request.
      */
-    return apply_filters('xyz/is_wp_xmlrpc_request', defined('XMLRPC_REQUEST') && XMLRPC_REQUEST);
+    return apply_filters('locomotive/is_wp_xmlrpc_request', defined('XMLRPC_REQUEST') && XMLRPC_REQUEST);
 }
 
 /**
@@ -526,7 +526,7 @@ function is_admin_doing_ajax(): bool
      *
      * @param bool $wp_doing_ajax Whether the current request is a WordPress Admin AJAX request.
      */
-    return apply_filters('xyz/is_admin_doing_ajax', $is_admin_doing_ajax);
+    return apply_filters('locomotive/is_admin_doing_ajax', $is_admin_doing_ajax);
 }
 
 /**
@@ -559,7 +559,7 @@ function is_frontend_doing_ajax(): bool
      *
      * @param bool $wp_doing_ajax Whether the current request is a frontend WordPress AJAX request.
      */
-    return apply_filters('xyz/is_frontend_doing_ajax', $is_frontend_doing_ajax);
+    return apply_filters('locomotive/is_frontend_doing_ajax', $is_frontend_doing_ajax);
 }
 
 /**

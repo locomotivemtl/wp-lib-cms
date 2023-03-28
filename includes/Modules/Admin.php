@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Cms\Modules;
+namespace Locomotive\Cms\Modules;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 use WP_Admin_Bar;
 
-use const App\Cms\VERSION;
-
-use function App\Cms\Support\uri;
+use function Locomotive\Cms\Support\uri;
 
 /**
  * Module: WordPress Admin
@@ -72,13 +70,13 @@ class Admin implements Bootable
     public function register_seo_hooks(): void
     {
         // Slim SEO
-        add_filter('slim_seo_meta_box_priority', 'App\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
+        add_filter('slim_seo_meta_box_priority', 'Locomotive\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
 
         // The SEO Framework
-        add_filter('the_seo_framework_metabox_priority', 'App\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
+        add_filter('the_seo_framework_metabox_priority', 'Locomotive\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
 
         // Yoast SEO
-        add_filter('wpseo_metabox_prio', 'App\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
+        add_filter('wpseo_metabox_prio', 'Locomotive\\Cms\\Support\\__return_metabox_priority_low', 20, 0);
     }
 
     /**

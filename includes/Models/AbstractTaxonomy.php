@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Cms\Models;
+namespace Locomotive\Cms\Models;
 
-use App\Cms\Contracts\Models\Taxonomy;
-use App\Cms\Exceptions\MissingTaxonomyIdentifierException;
-use App\Cms\Models\AbstractModel;
+use Locomotive\Cms\Contracts\Models\Taxonomy;
+use Locomotive\Cms\Exceptions\MissingTaxonomyIdentifierException;
+use Locomotive\Cms\Models\AbstractModel;
 use WP_Taxonomy;
 use WP_Query;
 
-use function App\Cms\Support\maybe_add_action;
-use function App\Cms\Support\maybe_add_filter;
+use function Locomotive\Cms\Support\maybe_add_action;
+use function Locomotive\Cms\Support\maybe_add_filter;
 
 /**
  * Taxonomy Model
@@ -130,7 +130,7 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
     /**
      * Fires after a taxonomy is registered.
      *
-     * @listens XYZ#action:registered_taxonomy_{$taxonomy}
+     * @listens action:registered_taxonomy_{$taxonomy}
      *
      * @global array<string, WP_Taxonomy> $wp_taxonomies
      *

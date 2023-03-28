@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Cms\Modules\ACF;
+namespace Locomotive\Cms\Modules\ACF;
 
 use acf_field;
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 use WP_Post;
 
-use function App\Cms\Support\with_filters;
-use function App\Cms\Support\without_filters;
+use function Locomotive\Cms\Support\with_filters;
+use function Locomotive\Cms\Support\without_filters;
 
 /**
  * ACF Module: Field Types
@@ -307,12 +307,12 @@ class FieldTypes implements Bootable
             }
 
             // Set position on row for sorting
-            $value[$i]['xyz_fc_position'] = $layout['position'];
+            $value[$i]['_fc_position'] = $layout['position'];
         }
 
         uasort($value, function ($a, $b) {
-            $pA = $a['xyz_fc_position'] ?? 0;
-            $pB = $b['xyz_fc_position'] ?? 0;
+            $pA = $a['_fc_position'] ?? 0;
+            $pB = $b['_fc_position'] ?? 0;
 
             if ($pA == $pB) {
                 return 0;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Cms\Contracts;
+namespace Locomotive\Cms\Contracts;
 
 /**
  * Bootable interface

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Modules;
+namespace Locomotive\Cms\Modules;
 
-use App\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Bootable;
 use InvalidArgumentException;
 use WP_Post;
 
@@ -60,7 +60,7 @@ class PostTemplates implements Bootable
         add_filter("manage_{$screen_id}_sortable_columns",    [$this, 'register_sortable_template_column']);
         add_filter('request', [$this, 'order_template_column']);
 
-        add_filter('xyz/post-templates/column/output', [$this, 'get_default_post_template_output'], 15);
+        add_filter('locomotive/post-templates/column/output', [$this, 'get_default_post_template_output'], 15);
     }
 
     /**
@@ -93,7 +93,7 @@ class PostTemplates implements Bootable
      * @listens WP#action:manage_pages_custom_column
      *     Fires for each custom column of a specific post type in the Posts list table.
      *
-     * @fires filter:xyz/post-templates/column/output
+     * @fires filter:locomotive/post-templates/column/output
      *
      * @param  string  $column_name The name of the column to display.
      * @param  integer $post_id     The current post ID.
@@ -111,13 +111,13 @@ class PostTemplates implements Bootable
         /**
          * Filter the post template cell value of the post.
          *
-         * @event  filter:xyz/post-templates/column/output
+         * @event  filter:locomotive/post-templates/column/output
          *
          * @param  string  $output   The value of the cell to display.
          * @param  string  $template The current post's assigned post template.
          * @param  integer $post_id  The current post ID.
          */
-        echo apply_filters('xyz/post-templates/column/output', (string) $template_name, $template_path, $post_id);
+        echo apply_filters('locomotive/post-templates/column/output', (string) $template_name, $template_path, $post_id);
     }
 
     /**
@@ -160,7 +160,7 @@ class PostTemplates implements Bootable
     /**
      * Retrieve the default page template output.
      *
-     * @listens filter:xyz/post-templates/column/output
+     * @listens filter:locomotive/post-templates/column/output
      *
      * @param  string $output The value of the cell to display.
      * @return string

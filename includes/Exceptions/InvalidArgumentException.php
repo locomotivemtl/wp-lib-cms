@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Cms\Exceptions;
+namespace Locomotive\Cms\Exceptions;
 
-use App\Cms\Contracts\Exceptions\Exception;
+use Locomotive\Cms\Contracts\Exceptions\Exception;
 
 /**
  * Thrown if an argument is not of the expected type.

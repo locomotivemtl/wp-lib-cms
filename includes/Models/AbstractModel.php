@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Cms\Models;
+namespace Locomotive\Cms\Models;
 
-use App\Cms\Contracts\Bootable;
-use App\Cms\Contracts\Models\Model;
+use Locomotive\Cms\Contracts\Bootable;
+use Locomotive\Cms\Contracts\Models\Model;
 
 /**
  * Base Model
