@@ -7,22 +7,18 @@ use WP_Post_Type;
 use WP_Taxonomy;
 
 /**
- * Bootstraps the plugin.
+ * Bootstraps the library.
  *
- * @param  array $modules Zero or more modules to boot.
+ * @param  (class-string|object)[] $modules Zero or more modules to boot.
  * @return void
  */
 function bootstrap(array $modules = []): void
 {
-    define( __NAMESPACE__ . '\PACKAGE_NAME', 'locomotivemtl/wp-lib-cms' );
-    define( __NAMESPACE__ . '\PACKAGE_PATH', dirname(__DIR__) );
+    define_constants();
 
     register_initial_hooks();
 
-    provide_extra_hooks();
-
-    Modules\ACF\bootstrap();
-    Modules\Polylang\bootstrap();
+    register_extra_hooks();
 
     // Bootstrap the models and modules
     foreach ($modules as $module) {
@@ -37,7 +33,15 @@ function bootstrap(array $modules = []): void
 }
 
 /**
- * Registers actions and filters for the plugin.
+ * Defines initial library constants.
+ */
+function define_constants() : void {
+    define(__NAMESPACE__ . '\PACKAGE_NAME', 'locomotivemtl/wp-lib-cms');
+    define(__NAMESPACE__ . '\PACKAGE_PATH', dirname(__DIR__));
+}
+
+/**
+ * Registers actions and filters for the library.
  *
  * @return void
  */
@@ -52,7 +56,7 @@ function register_initial_hooks(): void
  *
  * @return void
  */
-function provide_extra_hooks(): void
+function register_extra_hooks(): void
 {
     add_action('unregistered_post_type',  __NAMESPACE__ . '\\unregistered_post_type', 10, 1);
     add_action('unregistered_taxonomy',   __NAMESPACE__ . '\\unregistered_taxonomy',  10, 1);

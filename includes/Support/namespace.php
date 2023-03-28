@@ -13,12 +13,12 @@ use const Locomotive\Cms\PACKAGE_NAME;
 use const Locomotive\Cms\PACKAGE_PATH;
 
 /**
- * Retrieves the directory URI of the plugin or package.
+ * Retrieves the directory URI of the plugin or library.
  *
  * If a file is passed in, it'll be appended to the end of the URI.
  *
  * @param  non-empty-string|null $path Path to search for.
- * @return non-empty-string The URI of the file in the plugin or package.
+ * @return non-empty-string The URI of the file in the plugin or library.
  *     If $path is NULL, the plugin URI is returned.
  */
 function uri(string $path = null): string
@@ -51,12 +51,12 @@ function uri(string $path = null): string
 }
 
 /**
- * Retrieves the directory path of the plugin or package.
+ * Retrieves the directory path of the plugin or library.
  *
  * If a file is passed in, it'll be appended to the end of the path.
  *
  * @param  non-empty-string|null $path Path to search for.
- * @return non-empty-string The absolute path of the file in the plugin or package.
+ * @return non-empty-string The absolute path of the file in the plugin or library.
  *     If $path is NULL, the plugin directory path is returned.
  */
 function path(string $path = null): string
@@ -89,7 +89,7 @@ function path(string $path = null): string
 }
 
 /**
- * Outputs a view template from the plugin or package.
+ * Outputs a view template from the plugin or library.
  *
  * @param  non-empty-string     $path File to search for.
  * @param  array<string, mixed> $data The variables to be passed through to the view.
