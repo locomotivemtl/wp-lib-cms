@@ -66,6 +66,16 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
     }
 
     /**
+     * Retrieves a post type object.
+     *
+     * @return ?WP_Taxonomy
+     */
+    public function get_taxonomy_object(): ?WP_Taxonomy
+    {
+        return ($this->wp_taxonomy_object ??= (get_taxonomy(static::TAXONOMY) ?: null));
+    }
+
+    /**
      * Determine if the taxonomy is registered.
      *
      * @return bool
@@ -108,7 +118,7 @@ abstract class AbstractTaxonomy extends AbstractModel implements Taxonomy
      */
     public function init_query_flag(WP_Query $wp_query): void
     {
-        $tax_obj    = get_taxonomy(static::TAXONOMY);
+        $tax_obj    = $this->get_taxonomy_object();
         $query_flag = $tax_obj->query_flag ?? null;
 
         if ($query_flag && !isset($wp_query->{$query_flag})) {

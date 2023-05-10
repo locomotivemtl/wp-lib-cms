@@ -68,6 +68,16 @@ abstract class AbstractPostType extends AbstractModel implements PostType
     }
 
     /**
+     * Retrieves a post type object.
+     *
+     * @return ?WP_Post_Type
+     */
+    public function get_post_type_object(): ?WP_Post_Type
+    {
+        return ($this->wp_post_type_object ??= get_post_type_object(static::POST_TYPE));
+    }
+
+    /**
      * Determine if the post type is registered.
      *
      * @return bool
@@ -141,7 +151,7 @@ abstract class AbstractPostType extends AbstractModel implements PostType
      */
     public function init_query_flag(WP_Query $wp_query): void
     {
-        $ptype_obj  = get_post_type_object(static::POST_TYPE);
+        $ptype_obj  = $this->get_post_type_object();
         $query_flag = $ptype_obj->query_flag ?? null;
 
 
