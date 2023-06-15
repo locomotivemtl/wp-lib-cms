@@ -121,19 +121,22 @@ function view(string $path, array $data = []): void
  *
  * Loads the plugin's translated strings similar to {@see load_plugin_textdomain()}.
  *
- * @fires  WP#filter:plugin_locale
+ * @fires WP#filter:plugin_locale
+ *
+ * @global WP_Textdomain_Registry $wp_textdomain_registry WordPress Textdomain Registry.
  *
  * @param  string|null $domain The plugin's text domain.
  * @return bool
  */
 function load_textdomain(string $domain = null): bool
 {
+    global $wp_textdomain_registry;
+
     if (empty($domain)) {
         $domain = 'locomotive';
     }
 
-    $locale = determine_locale();
-    $locale = apply_filters('plugin_locale', $locale, $domain);
+    $locale = apply_filters('plugin_locale', determine_locale(), $domain);
     $mofile = $locale . '.mo';
 
     try {
@@ -142,7 +145,9 @@ function load_textdomain(string $domain = null): bool
         return false;
     }
 
-    return \load_textdomain($domain, $mopath);
+    $wp_textdomain_registry->set_custom_path($domain, path('resources/languages'));
+
+    return \load_textdomain($domain, $mofile, $locale);
 }
 
 /**
