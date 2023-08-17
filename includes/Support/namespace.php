@@ -147,7 +147,7 @@ function load_textdomain(string $domain = null): bool
 
     $wp_textdomain_registry->set_custom_path($domain, path('resources/languages'));
 
-    return \load_textdomain($domain, $mofile, $locale);
+    return \load_textdomain($domain, $mopath, $locale);
 }
 
 /**
