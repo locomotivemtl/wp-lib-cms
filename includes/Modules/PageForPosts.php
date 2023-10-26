@@ -4,7 +4,6 @@ namespace Locomotive\Cms\Modules;
 
 use Locomotive\Cms\Contracts\Bootable;
 use Locomotive\Cms\Contracts\Models\Model;
-use Locomotive\Cms\Models\PostTypes\Page;
 use InvalidArgumentException;
 use WP_Post;
 use WP_Post_Type;
@@ -336,7 +335,7 @@ class PageForPosts implements Bootable
         if ($queried_object instanceof WP_Post) {
             $page = $queried_object;
 
-            if ($page->post_type === Page::POST_TYPE && isset($page->post_title)) {
+            if ($page->post_type === 'page' && isset($page->post_title)) {
                 /**
                  * Filters the page title for a single post.
                  *
